@@ -7,6 +7,14 @@ ChapInit(unit)
 ether_ifattach
 
 net driver entry:
-void ether_attach (ifp, unit, name, initRtn, ioctlRtn, outputRtn, resetRtn)
+void ether_attach (ifp, unit, name, initRtn, ioctlRtn, outputRtn, resetRtn) -> ether_attach - 将新的网络接口附加到网络层。 填写 ifnet 结构并将其传递给 if_attach () 例程，该例程将该结构中描述的网络接口附加到网络层软件，以供将来在路由、数据包接收和传输中使用
 if_attach (ifp)
+    s = splnet () -> 设置网络处理器级别, splnet 可用于确保共享公共网络数据结构的进程之间的互斥。 在 UNIXland 中，这是通过设置处理器中断级别来完成的。 然而，在 VxWorksLand 中，我们使用简单的信号量机制。 splx 应在关键部分完成后调用。 我们必须首先检查是否已经处于网络级别
+    while (*p)
+    splx (s)
+    m2IfTableUpdate
+    splnet
+    ether_ifattach -> 附加到接口列表时执行公共程序
+
+
 
