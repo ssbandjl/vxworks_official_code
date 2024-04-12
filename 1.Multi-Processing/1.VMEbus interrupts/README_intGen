@@ -1,0 +1,66 @@
+FILE LIST -
+      intGen.c
+
+DESCRIPTION -
+	      This demo generates a VMEbus interrupt to demonstrate
+	      synchronization among tasks on multiple CPUs.
+
+	      The intGen() routine counts down from the initialized countdown 
+	      value to zero and then generates VME bus interrupt to synchronize
+	      with a task running on CPU 1.  This program is meant to be
+	      run on CPU 0.
+
+	      The intGen task runs on CPU 0, intSync task runs on CPU 1
+
+	      To run this demo invoke the function 
+	      intGenDemo(intSyncTargetArchType) where intSyncTargetArchType is 
+	      the value for the intSync task's target architecture type.
+	      Possible intSyncTargetArchType values and corresponding
+	      architecture types are given below:
+	      value     architecture type
+	      ----      -----------------
+	        1        68k
+		2        sparc
+		3        i960
+
+	      eg. intGenDemo 1
+
+RUNNING DEMO -
+	       You need to set/change the value of INTNUM constant
+	       (VMEbus interrupt number to which intSync task's ISR
+	       is connected) and intNum variable (interrupt number
+	       for generating VMEbus interrupt).
+
+	       Some VMEbus Single Board Computer systems can not generate
+	       VMEbus interrupts. Check your hardware and board specific
+	       BSP documents for VMEbus interrupts support.
+
+	       Place the intGen.c file in your <Tornado> dir.
+	       Depending on the target you have, define the CPU in your compile 
+	       line and use the Makefile in the BSP dir. to compile.
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+	      EXAMPLE COMPILE LINE - (use the MakeFile in the BSP)
+ 			    make CPU=PPC604 intGen.o
+
+% make intGen.o
+ppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c intGen.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <intGen.o
+value = 778528 = 0xbe120
+
+~
+

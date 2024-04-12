@@ -1,0 +1,63 @@
+FILE LIST - 
+             testGmtime.c
+
+DESCRIPTION -
+	     This file compares the current local time with GM time.
+	     malloc:
+	     This routine allocates a block of memory from the free list.
+	     The size of the block will be equal to or greater than nBytes.
+	     RETURNS a pointer to the allocated block of memory, or a
+	     null pointer if there is an error.
+
+	     assert:
+	     If an expression is false (that is, equal to zero), the assert()
+	     macro writes information about the failed call to standard erro
+	     in an implementation-defined format.  It then calls abort().  The
+	     diagnostic information includes:
+
+	     -the test of the argument
+	     -the name of the source file (value of preprocessor macro __FILE__)
+	     -the source line number (value of preprocessor macro __LINE__).
+	     RETURNS N/A.
+
+	     tmcmp:
+	     This routine compares two structures (member against member).
+	     RETURNS a value of false (that is, equal to zero) if the
+	     expression are not equal, or returns true otherwise.
+
+	     To run this code invoke the function testGmtime().
+
+RUNNING DEMO -
+	     Place the testGmtime.c in your <Tornado> dir. Depending on
+	     the target you have, define the CPU in your compile line and use
+	     the Makefile in the BSP dir. to compile.
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+	    make CPU=PPC604 testGmtime.o
+
+% make CPU=PPC604 testGmtime.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c testGmtime.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <testGmtime.o
+value = 918816 = 0xe0520
+-> testGmtime()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+SUCCESS testing gmtime
+

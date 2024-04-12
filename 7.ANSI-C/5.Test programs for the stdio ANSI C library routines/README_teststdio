@@ -1,0 +1,51 @@
+FILE LIST -
+             teststdio.c
+
+DESCRIPTION -
+	     The following functions fopen, fclose and freopen have been
+	     tested here.
+	     fopen() - This is used to open a file. fopen returns a pointer
+	     to the beginning of the buffer area associated with the file or a
+	     NULL if the file cannot be opened.
+	     fclose() - A data file must always be closed at the end of 
+             a program and this is achieved using the fclose function.
+	     freopen() - This is used to attach preopened streams to other 
+             files.
+
+RUNNING DEMO - 
+	     Place the teststdio.c in your <Tornado> dir.
+	     Depending on the target you have, define the 
+	     CPU in your compile line and use the Makefile
+	     in the BSP dir. to compile.
+
+	     Run teststdio() on vxworks target.
+
+TESTED ON -  Host/Target : Solaris 2.5.1 /mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+             make CPU=PPC604 teststdio.o		    
+			      
+% make teststdio.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c teststdio.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <teststdio.o
+value = 839784 = 0xcd068
+-> teststdio()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+Success testing stdio
+

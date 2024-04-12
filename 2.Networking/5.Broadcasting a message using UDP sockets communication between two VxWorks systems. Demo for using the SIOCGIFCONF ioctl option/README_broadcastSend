@@ -1,0 +1,53 @@
+FILE LIST -
+             broadcastSend.c
+
+DESCRIPTION -
+	     Demo for sending a broadcasting message.
+
+RUNNING DEMO -
+	     You need to set/change the value of the BROADCAST_ADDR constant to
+	     your (subnet) network's broadcast inet address.
+
+	     #define BROADCAST_ADDR 
+
+	     Run broadcastSend task on one VxWorks system as follows
+	     after starting the broadcastGet task from another VxWorks system
+	     in the same physical network. The other half of the demonstration
+	     is in broadcastGet.c.
+
+	     Port number should be greater than 5000 for user applications. 
+
+TESTED ON -  Host/Target : Solaris 2.5 / mv162
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	     make CPU=MC68040 broadcastSend.o
+
+%  make CPU=MC68040 broadcastSend.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c broadcastSend.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <broadcastSend.o
+value = 730424 = 0xb2538
+-> sp (broadcastSend,  7001)
+task spawned: id = 5d1ca0, name = u1
+value = 6102176 = 0x5d1ca0
+
+The output on the console window:
+=================================
+
+etherOutput done - message: Hello World!!! 
+etherOutputDemo completed
+17 bytes of broadcast message sent: Hello, world!!!
+
+

@@ -1,0 +1,201 @@
+FILE LIST -
+	    posixTimerStartDemo.c
+
+DESCRIPTION -
+	    Demo for executing a signal handler connected to a POSIX TIMER upon
+	    expiration of a delay 	 in seconds.
+
+DESCRIPTION -
+	    Place the posixTimerStartDemo.c in your <Tornado> dir. Depending on
+	    the target you have, define the CPU in your compile line and use
+	    the Makefile in the BSP dir. to compile.
+
+	    Make sure that the following are INCLUDED in your configAll.h file:
+	    #define INCLUDE_POSIX_SIGNALS    ** POSIX queued signals **
+	    #define INCLUDE_POSIX_TIMERS     ** POSIX timers **
+
+	    To run posixTimerStartDemo code invoke the function 
+	    posixTimerStartDemo().
+
+CAVEAT    - This code fails on a mv1604 board and a hkv960 board.
+
+TESTED ON - Host/Target : Solaris 2.5.1 / mv177
+	    VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	    make CPU=PPC604 posixTimerStartDemo.o
+
+%make CPU=PPC604 posixTimerStartDemo.o 
+cc68k -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-m68040 -ansi -nostdinc -O2 -fvolatile -fno-builtin -Wall -I/h   -I. 
+-I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=MC68060     
+-c posixTimerStartDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <posixTimerStartDemo.o
+value = 663408 = 0xa1f70
+-> sp (posixTimerStartDemo)
+task spawned: id = 1fb54e8, name = u0
+value = 33248488 = 0x1fb54e8
+
+The Output on Console:
+======================
+demoTask: Waiting to be synchronized by posix timer SIGALRM signal
+posixTimerStart: Unblock the demoTask in 5 seconds
+0x1fadc70 (posixTimerStart): 
+Signal SIGALRM raised
+demoTask: Synchronization done
+
+demoTask: RUNNING
+
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv2603
+	      VxWorks     : 5.3.1
+
+	      The mv2600_collective3 collective patch was installed before
+	      it was tested on a mv2603 BSP
+
+EXAMPLE COMPILE LINE -
+	      make posixTimerStartDemo.o
+	       
+%make posixTimerStartDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope  
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC603  -DMV2600 
+-DTARGET_DIR="\"mv2603\""   -c posixTimerStartDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <posixTimerStartDemo.o
+value = 662152 = 0xa1a88
+-> sp (posixTimerStartDemo)
+task spawned: id = bed0f0, name = u0
+value = 12505328 = 0xbed0f0
+
+The Output on Console:
+======================
+demoTask: Waiting to be synchronized by posix timer SIGALRM signal
+posixTimerStart: Unblock the demoTask in 5 seconds
+0xbe80c8 (posixTimerStart): 
+Signal SIGALRM raised
+demoTask: Synchronization done
+
+demoTask: RUNNING
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1603
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	      make posixTimerStartDemo.o
+
+% make posixTimerStartDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope  
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC603  -DMV1600 
+-DTARGET_DIR="\"mv1603\""   -c posixTimerStartDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <posixTimerStartDemo.o
+value = 662096 = 0xa1a50
+-> sp (posixTimerStartDemo)
+task spawned: id = 5d1ca0, name = u0
+value = 6102176 = 0x5d1ca0
+
+The Output on Console:
+======================
+demoTask: Waiting to be synchronized by posix timer SIGALRM signal
+posixTimerStart: Unblock the demoTask in 5 seconds
+0x5ccc78 (posixTimerStart): 
+Signal SIGALRM raised
+demoTask: Synchronization done
+
+demoTask: RUNNING
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / pc486
+	      VxWorks     : 5.3.1
+
+%make posixTimerStartDemo.o
+cc386 -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ -m486 
+-ansi -nostdinc -O -fvolatile -nostdlib -fno-builtin -fno-defer-pop -Wall 
+-I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=I80486     
+-c posixTimerStartDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld < posixTimerStartDemo.o
+value = 3208112 = 0x30f3b0
+-> posixTimerStartDemo
+value = 0 = 0x0
+
+The Output on Console:
+======================
+demoTask: Waiting to be synchronized by posix timer SIGALRM signal
+posixTimerStart: Unblock the demoTask in 5 seconds
+
+demoTask: Synchronization done
+
+demoTask: RUNNING
+
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv2603
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	     make CPU=PPC603 posixTimerStartDemo.o
+
+%make CPU=PPC603 posixTimerStartDemo.o
+ccppc -B/petaluma1/mayur/tor101/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope  
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101/target/config/all 
+-I/petaluma1/mayur/tor101/target/h -I/petaluma1/mayur/tor101/target/src/config 
+-I/petaluma1/mayur/tor101/target/src/drv -DCPU=PPC603  -DMV2600 
+-DTARGET_DIR="\"mv2603\""   -c posixTimerStartDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <posixTimerStartDemo.o
+value = 662440 = 0xa1ba8
+-> sp (posixTimerStartDemo)
+task spawned: id = be7d28, name = u0
+value = 12483880 = 0xbe7d28
+
+
+The Output on Console:
+======================
+demoTask: Waiting to be synchronized by posix timer SIGALRM signal
+posixTimerStart: Unblock the demoTask in 5 seconds
+0xbe2d00 (posixTimerStart): 
+Signal SIGALRM raised
+demoTask: Synchronization done
+
+demoTask: RUNNING
+

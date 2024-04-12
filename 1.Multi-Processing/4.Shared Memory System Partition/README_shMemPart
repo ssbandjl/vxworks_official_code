@@ -1,0 +1,70 @@
+FILE LIST -
+	memPartSend.c
+	memPartReceive.c
+
+DESCRIPTION -
+	     These files create a user-defined partition and store the 
+	     shared data in this new partition. A shared semaphore is
+	     used to protect the data.
+
+	     The file memPartSend.c writes to the user-defined shared memory
+	     partition.
+	     The file memPartReceive.c reads from the user-defined shared
+	     memory partition. 
+
+	     To run this demo invoke the function memPartSend() from 
+	     memPartSend.c followed by the function memPartReceive()
+	     from the memPartReceive.c file.
+
+RUNNING DEMO - 
+	     Place the memPartSend.c and memPartReceive.c in your <Tornado> dir.
+	     Depending on the target you have, define the CPU in your compile
+	     line and use the Makefile in the BSP dir. to compile.
+
+	     Include INCLUDE_SM_OBJ in configAll.h, and re-make vxWorks.
+
+	     Install VxMP into your Tornado tree before running this code.
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1604
+             VxWorks     : 5.3.1
+
+	     EXAMPLE COMPILE LINE -
+			    make CPU=PPC604 memPartSend.o
+			    make CPU=PPC604 memPartReceive.o
+
+% make memPartSend.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c memPartSend.c
+
+% make memPartReceive.c
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c memPartReceive.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <memPartSend.o
+value = 8384920 = 0x7ff198 = buffReceive + 0x400
+
+On VxWorks target:
+==================
+
+-> ld <memPartReceive.o
+value = 8383456 = 0x7febe0 = memPartReceive + 0xc0
+
+		
+     
+
+

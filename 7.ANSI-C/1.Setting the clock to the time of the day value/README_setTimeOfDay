@@ -1,0 +1,76 @@
+FILE LIST -
+             setTimeOfDay.c
+
+DESCRIPTION -
+	     TIMEZONE:
+	     This file sets the time zone environment  variable  TZ,  and
+	     the  locale-related  environment variables LANG, LC_COLLATE,
+	     LC_CTYPE, LC_MESSAGES, LC_MONETARY, LC_NUMERIC, and LC_TIME.
+	     stdio:
+	     A file with associated buffering is  called  a  stream  (see
+	     intro(3))  and is declared to be a pointer to a defined type
+	     FILE.  fopen() creates certain descriptive data for a stream
+	     and returns a pointer to designate the stream in all further
+	     transactions.  Normally, there are three open  streams  with
+	     constant pointers declared in the <stdio.h> header and asso-
+	     ciated with the standard open files:
+	     date:
+	     The date utility writes the date and time to standard output
+	     or  attempts  to  set the system date and time.  By default,
+	     the current date and time will be written.
+	     NOTES:
+	     If you attempt to set the current date to one of  the  dates
+	     that the standard and alternate time zones change (for exam-
+	     ple, the date that daylight time is starting or ending), and
+	     you  attempt  to  set  the  time  to  a time in the interval
+	     between the end of standard time and the  beginning  of  the
+	     alternate  time  (or  the  end of the alternate time and the
+	     beginning of standard time), the results are unpredictable.
+
+RUNNING DEMO -
+	     Place the setTimeOfDay.c file in your <Tornado> dir. 
+	     Depending on the target you have, define the CPU in
+	     your compile line and use the Makefile in the 
+	     BSP dir. to compile.
+             
+	     #define TIME_ENV "TIMEZONE = PST:PDT:480:040202:101502"
+	     As part of the work-around, set PDT start and stop times to be
+	     the gmt times that PDT starts and stops locally.
+
+	     To run this code invoke the function rdate() followed by date().
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+	     make CPU=PPC604 setTimeOfDay.o
+
+% make setTimeOfDay.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c setTimeOfDay.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <setTimeOfDay.o
+value = 894904 = 0xda7b8
+-> rdate
+value = 0 = 0x0
+-> date
+value = 0 = 0x0
+
+The Output on Console:
+======================
+Setting date from: petaluma
+WED NOV 12 10:15:59 1997
+WED NOV 12 10:17:02 1997
+
+
+              

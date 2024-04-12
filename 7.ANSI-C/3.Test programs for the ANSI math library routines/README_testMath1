@@ -1,0 +1,107 @@
+FILE LIST -
+              testMath1.c
+
+DESCRIPTION -
+	      This program is a test routine for the math library.
+	      Some of the functions being tested here are as follows:
+
+	      double ceil(double x);
+	      ceil(x) returns the least  integral  value  greater  than  or
+	      equal  to  x.
+
+	      double floor(double x);
+	      floor(x) returns the greatest integral  value  less  than  or
+	      equal  to  x.
+
+	      double fabs(double x);
+	      fabs(x) returns the absolute value of x.
+
+	      double fmod(double x, double y);
+	      fmod(x,y) returns a remainder  of  x  with respect  to  y.
+
+	      double modf(double value, double *iptr);
+	      modf() returns the signed  fractional part of value and
+	      store the integral part indirectly in the location pointed to
+	      by iptr.
+
+	      double ldexp(double value, int exp);
+	      ldexp() returns the quantity value *  2exp.
+
+	      double frexp(double value, int *eptr);
+	      frexp() returns  the  mantissa  of  a  double  value, and
+	      stores the exponent indirectly in the location pointed
+	      to by eptr. If value is zero, both results returned by
+	      frexp() are zero.
+
+	      To run this demo invoke the function testmath1()
+
+RUNNING DEMO -
+	      Place the testMath1.c file in your <Tornado> dir. 
+              Depending on the target architecutre define the CPU 
+              in your compile line; use the Makefile of your BSP dir. 
+              to compile the demo code.
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv177
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	      make  testMath1.o
+
+cc68k -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ -m68040 -ans
+i -nostdinc -O2 -fvolatile -fno-builtin -Wall -I/h   -I. 
+-I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=MC68060     -c testMath1.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <testMath1.o
+value = 1312552 = 0x140728
+-> testmath1()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+fmod(-3.0, 3.0) returns 0.000000
+frexp(0.0, &xexp) returns 0.000000, 0
+ldexp(0.0, 36) returns 0.000000
+SUCCESS testing math, part 1
+
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+              VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+              make  testMath1.o
+
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c testMath1.c
+
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <testMath1.o
+value = 699600 = 0xaacd0
+-> testmath1()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+
+fmod(-3.0, 3.0) returns 0.000000
+frexp(0.0, &xexp) returns 0.000000, 0
+ldexp(0.0, 36) returns 0.000000
+SUCCESS testing math, part 1 
+

@@ -1,0 +1,56 @@
+# Makefile - makefile for src/snmpv1/agent
+#
+# Copyright 1984-1996 Wind River Systems, Inc.
+#
+# modification history
+# --------------------
+# 01e,28aug97,rv  modified for demo.mib and demo.c in Tornado 1.0.1
+# 01d,07nov96,yp  made complient with new target build
+# 01c,10jul96,yp  reversed dir seperator in UP LIBDIR. removed trailing /.
+# 01b,17may96,jag Added docs, and clean.
+# 01a,13may96,yp  written.
+#
+# DESCRIPTION
+# This file contains rules for building snmp binaries for vxWorks
+#
+#*/
+
+TGT_DIR=$(WIND_BASE)/target
+
+LIBNAME		= lib$(CPU)$(TOOL)vx.a
+LIBDIRNAME	= obj$(CPU)$(TOOL)vx
+
+MIBSRC		= snmpMib2.mib demo.mib
+MCCMIBS		= rfc1213.mib
+MDIRS		= -l ../mibs -l .
+MCC		= mibcomp
+
+DOC_FILES 	= snmpdLib.c snmpIoLib.c
+
+OBJS		= snmpdLib.o snmpIoLib.o snmpIcmp.o snmpIf.o snmpIp.o \
+      		  snmpMib2.o snmpSnmp.o snmpSystem.o  snmpTcp.o snmpUdp.o demo.o
+
+EXTRA_INCLUDE	= -I$(TGT_DIR)/h/snmp/  -I.
+EXTRA_DEFINE	= -DVXWORKS
+
+include $(TGT_DIR)/h/make/rules.library
+
+snmpMib2.c :$(MIBSRC)
+	$(MCC) $(MDIRS) -o $@ $(FLAGS) rfc1155.smi $(MCCMIBS) $(MIBSRC)
+
+mibhand.h :$(MIBSRC)
+	$(MCC) $(MDIRS) -o $@ $(FLAGS) -skel.h rfc1155.smi $(MCCMIBS) $(MIBSRC)
+
+mibleaf.h :$(MIBSRC)
+	$(MCC)  $(MDIRS) -o $@ $(FLAGS) -leaf rfc1155.smi $(MCCMIBS) $(MIBSRC)
+
+clean : cleanHear
+
+cleanHear :
+	$(RM) snmpMib2.c
+	$(RM) mibleaf.h
+	$(RM) mibhand.h
+
+$(LIBDIR)/snmpMib2.o : snmpMib2.c mibleaf.h mibhand.h
+
+depend.$(CPU)$(TOOL) : mibhand.h mibleaf.h snmpMib2.c

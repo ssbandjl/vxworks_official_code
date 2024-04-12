@@ -1,0 +1,49 @@
+FILE LIST -
+             broadcastGet.c
+
+DESCRIPTION -
+	     Demo for getting the broadcast message. It also demonstrates the 
+             usage of SIOCGIFCONF ioctl option. This SIOCGIFCONF ioctl 
+             option is not needed for broadcasting.
+
+
+RUNNING DEMO -
+   	     Run broadcastGet task on one VxWorks system as follows
+	     before starting the broadcastSend task from another VxWorks 
+             system in the same physical network. The other half of 
+             the demonstration is in broadcastSend.c.
+
+	     Port number should be greater than 5000 for user applications.
+
+TESTED ON - Host/Target : Solaris 2.5.1 / mv1604
+	    VxWorks     : 5.3.1
+				   
+EXAMPLE COMPILE LINE - (use the Makefile in the BSP dir.)
+   	    make CPU=PPC604  broadcastGet.o
+
+%  make CPU=PPC604 broadcastGet.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c broadcastGet.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <broadcastGet.o
+value = 971784 = 0xed408
+->  sp (broadcastGet,  7001)
+task spawned: id = 5c7c50, name = u23
+value = 6061136 = 0x5c7c50
+
+The output on the console window:
+=================================
+
+SIOCGIFCONF: This socket uses the network interface dc0
+
+received 17 bytes of broadcast message:  Hello, world!!!

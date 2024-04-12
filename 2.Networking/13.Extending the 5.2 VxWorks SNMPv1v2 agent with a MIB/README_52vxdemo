@@ -1,0 +1,22 @@
+
+FILE LIST - 
+              k_vxdemo.c  v_vxdemo.c  vxdemo.my
+
+DESCRIPTION -
+              This demo is for the SNMP agent running on 5.2 VxWorks.
+              The example is described in the WindNet SNMP 1.0
+              Optional Product Supplement, and the SNMP user guide is
+              distributed for the agent installation on VxWorks 5.2  
+              Also see the SNMP FAQ.
+  
+              The method routines in this demo cannot be used as is with 
+              the SNMP agent that runs on Tornado 1.0 or 1.0.1. 
+              See the WindNet SNMPv1/v2c 1.0 Release notes regarding
+              the guidelines for migrating from 5.2 to 5.3. 
+
+RUNNING DEMO - 
+              See chapter 5 in the SNMP user guide - Extending WindNet SNMP 
+
+TESTED ON -   VxWorks 5.2
+
+

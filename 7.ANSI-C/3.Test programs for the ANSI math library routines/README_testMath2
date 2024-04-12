@@ -1,0 +1,54 @@
+FILE LIST -
+              testMath2.c
+
+DESCRIPTION - 
+	      sin(x), cos(x) and tan(x) return trigonometric functions  of
+	      radian  arguments.  Trigonometric argument reduction is car-
+	      ried out with respect to the infinitely precise n.
+	      asin(x) returns the arc sine of x in the range -n/2 to n/2.
+	      acos(x) returns the arc cosine of x in the range 0 to n.
+	      atan(x) returns the arc tangent of x in the range -n/2 to n/2.
+	      atan2(y,x) and hypot(x,y) (see hypot(3M)) convert  rectangu-
+	      lar coordinates (x,y) to polar (r,0); atan2(y,x) computes 0,
+	      the argument or phase, by computing an arc tangent of y/x in
+	      the range -n to n.
+
+RUNNING DEMO -
+	      Place the testMath2.c file in your <Tornado> dir. Depending on 
+	      the target you have, define the CPU in your compile line and use
+	      the Makefile in the BSP dir. to compile.
+
+	      For MC68LC040 you need to add INCLUDE_SW_FP in config.h
+	      and use VX_FP_TASK as the options parameter for taskSpawn() 
+              in usrConfig.c.
+
+	      To run this demo invoke the function testmath2()
+
+TESTED ON -   Host/Target : Solaris 2.5.1 /mv1604
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+              make CPU=PPC604 testMath2.o
+
+% make testMath2.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c testMath2.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <testMath2.o
+value = 747840 = 0xb6940
+-> testmath2()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+SUCCESS testing math, part 2

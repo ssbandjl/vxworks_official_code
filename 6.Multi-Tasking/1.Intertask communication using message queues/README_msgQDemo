@@ -1,0 +1,72 @@
+FILE LIST -
+	      msgQDemo.c
+
+DESCRIPTION -
+	      This demo demonstrates intertask communication using Message Queues.
+	      It creates a Message Queue for interTask communication between the
+	      producerTask and the consumerTask. It spawns the producerTask that creates
+	      messages and sends messages to the consumerTask using the message queue.
+	      It spawns the consumerTask that reads messages from the message queue.
+	      After consumerTask has consumed all the messages, the message queue is
+	      deleted.
+
+	      To run this code invoke the function msgQDemo()
+
+RUNNING DEMO -
+	      Place the msgQDemo.c file in your <Tornado> dir.
+	      Depending on the target you have, define the CPU in your compile
+	      line and use the Makefile in the BSP dir. to compile.
+
+	      Run msgQDemo() on vxworks target.
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - make CPU=PPC604 msgQDemo.o
+
+% make msgQDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c msgQDemo.c
+
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <msgQDemo.o
+value = 2577544 = 0x275488
+-> sp msgQDemo
+task spawned: id = 5ad730, name = u0
+value = 5953328 = 0x5ad730
+
+The Output on Console:
+======================
+producerTask started: task id = 0x7fcea8 
+ProducerTask: tid = 0x7fcea8, produced value = 10 
+ProducerTask: tid = 0x7fcea8, produced value = 20 
+ProducerTask: tid = 0x7fcea8, produced value = 30 
+ProducerTask: tid = 0x7fcea8, produced value = 40 
+ProducerTask: tid = 0x7fcea8, produced value = 50 
+ProducerTask: tid = 0x7fcea8, produced value = 60 
+ProducerTask: tid = 0x7fcea8, produced value = 70 
+ProducerTask: tid = 0x7fcea8, produced value = 80 
+
+
+ConsumerTask: Started -  task id = 0x7fcea8
+ConsumerTask: Consuming msg of value 10 from tid = 0x7fcea8
+ConsumerTask: Consuming msg of value 20 from tid = 0x7fcea8
+ConsumerTask: Consuming msg of value 30 from tid = 0x7fcea8
+ConsumerTask: Consuming msg of value 40 from tid = 0x7fcea8
+ConsumerTask: Consuming msg of value 50 from tid = 0x7fcea8
+ConsumerTask: Consuming msg of value 60 from tid = 0x7fcea8
+ConsumerTask: Consuming msg of value 70 from tid = 0x7fcea8
+ConsumerTask: Consuming msg of value 80 from tid = 0x7fcea8
+
+
+

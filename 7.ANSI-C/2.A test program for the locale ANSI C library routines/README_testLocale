@@ -1,0 +1,62 @@
+FILE LIST -
+             testLocale.c
+
+DESCRIPTION - 
+	     assert:
+	     If an expression is false (that is, equal to zero), the assert()  
+	     macro writes information about the failed call to standard error
+	     in an implementation-defined format.  It then calls abort(). 
+	     The diagnostic information includes:
+
+		  -the text of the argument
+		  -the name of the source file
+		    (value of preprocessor machro __FILE__)
+		  -the source line number (value of preprocessor macro __LINE__)
+
+             RETURNS N/A.
+
+	     strcmp:
+             This routine compares string s1 to s2 lexicographically.
+	     RETURNS an integer greater than, equal to, or less than 0,
+	     according to whether s1 is lexicographically greater than, equal
+	     to, or less than s2, respectively.
+
+	     strlen:
+	     This routine returns the number of characters in s, not including
+	     EOS.
+	     RETURNS the number of non-null characters in the string.
+
+RUNNING DEMO - 
+	      Place the testLocale.c in your <Tornado> dir. Depending on
+	      the target you have, define the CPU in your compile line and
+	      use the Makefile in the BSP directory to compile.
+
+	      To run this code invoke the function testlocale()
+
+TESTED ON -   Host/Target : Solaris 2.5.1 /mv1604
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	      make CPU=PPC604 testLocale.o
+
+% make testLocale.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c testLocale.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+-> ld <testLocale.o
+value = 721376 = 0xb01e0
+-> testlocale()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+SUCCESS testing locale

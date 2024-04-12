@@ -1,0 +1,69 @@
+FILE LIST -
+      semTask1.c
+      semTask2.c
+
+DESCRIPTION -
+	     The following code example creates two tasks executing on
+	     different CPUs and using shared semaphores. The routine
+	     semTask1( ) creates the shared semaphore, initializing
+	     the state to full. It adds the semaphore to the name database
+	     (to enable the task on the other CPU to access it), takes the
+	     semaphore, does some processing, and gives the semaphore. 
+	     The task semTask2( ) gets the semaphore ID from the database,
+	     takes the semaphore, does some processing, and gives the
+	     semaphore.
+
+RUNNING DEMO -
+	     Place semTask1.c and semTask2.c in your <Tornado> dir. Depending
+	     on the target you have, define the CPU in your compile line and use
+	     the Makefile in the BSP dir. to compile.
+
+	     Add INCLUDE_SM_NET , INCLUDE_SM_SEQ_ADDR and INCLUDE_SM_OBJ
+	     in the config.h file in the BSP
+
+	     Install VxMP into your Tornado tree before running this code.
+             
+	     Re-make vxWorks and reboot your board, before running.
+
+	     To run this demo invoke the semTask1() first followed by
+	     the semTask2().
+
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+	      EXAMPLE COMPILE LINE - (use the Makefile in the BSP)
+			    make CPU=PPC604 semTask1.o
+			    make CPU=PPC604 semTask2.o
+
+% make semTask1.o
+iccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c semTask1.c
+
+iccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c semTask2.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+=================
+-> ld <semTask1.o
+value = 8377120 = 0x7fd320 = memPartSend + 0x620
+
+On VxWorks target:
+=================
+-> ld <semTask2.o
+value = 8380112 = 0x7fded0 = semTask1 + 0x168
+
+
+	      

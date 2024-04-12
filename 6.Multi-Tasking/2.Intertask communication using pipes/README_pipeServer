@@ -1,0 +1,59 @@
+FILE LIST -
+	      pipeServer.c
+
+DESCRIPTION -
+	     This demo demonstrates intertask communication using pipes.
+	     ServerStart() initializes a server task to execute functions
+	     at a low priority and uses pipes as the communication
+	     mechanism.
+
+	     serverSend() sends a request to the server to execute a
+	     function at the server's  priority using pipe device.
+
+	     To run the code invoke the function serverStart().
+
+RUNNING DEMO -
+	     Place the pipeServer.c file in your <Tornado> dir. Depending
+	     on the target you have, define the CPU in your compile line 
+	     and use the Makefile in the BSP dir. to compile.
+
+	     A host function such as i() cannot be used as the function
+	     argument to serveSend.
+	     eg: -> serverSend(i,"tShell") will not work
+	     However if you wish to do that then make sure to add
+	     INCLUDE_CONFIGURATION_5_2 and INCLUDE_DEBUG in configAll.h and
+	     re-make vxWorks.
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+	      EXAMPLE COMPILE LINE - (use the MakeFile in the BSP)
+			    make CPU=PPC604 pipeServer.o
+		     
+% make pipeServer.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c pipeServer.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <pipeServer.o
+value = 2578392 = 0x2757d8
+-> serverStart   
+value = 0 = 0x0
+-> serverSend (printf,"Hello World. \n")
+value = 0 = 0x0
+
+The Output on Console:
+======================
+Hello World.
+
+
+	      

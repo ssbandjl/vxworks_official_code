@@ -1,0 +1,241 @@
+FILE LIST -
+             recoverExcDemo.c
+
+DESCRIPTION -
+	     Demonstrates using signals to allow a task to recover gracefully
+	     from an exception.
+
+RUNNING DEMO -
+	     Place the recoverExcDemo.c in your <Tornado> dir. Depending on
+	     the target you have, define the CPU in your compile line and
+	     use the Makefile in the BSP dir. to compile.
+
+             To run this code invoke the function recoverDemo().
+
+CAVEAT    -  This code fails on a mv1604 board.
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / hkv960
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	      make recoverExcDemo.o
+
+%make recoverExcDemo.o
+/folk/mayur/tor101-ppc/target/config/hkv960> make recoverExcDemo.o
+cc960 -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ -mca 
+-mstrict-align -ansi -nostdinc -O -fvolatile -fno-builtin  -Wall -I/h   -I. 
+-I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=I960CA 
+-DVX_IGNORE_GNU_LIBS    -c recoverExcDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <recoverExcDemo.o
+value = 666272 = 0xa2aa0
+-> recoverDemo()
+
+Exception number 2: Task: 0x7cd540 () 
+
+Operation Fault
+fault type: 0x2
+subtype   : 0x2
+ip        : 0xe19a0
+pcw       : 0xd86088ff
+acw       : 0x1002
+value = 0 = 0x0
+
+The Output on Console:
+======================
+demo_recover...
+demo_recover...setup sigvec
+causing bus error
+
+Signal SIGILL received
+recover from signal 4. val = 50 
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv177
+              VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+              make MC68060 recoverExcDemo.o
+
+%make MC68060 recoverExcDemo.o
+cc68k -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ -m68040 
+-ansi -nostdinc -O2 -fvolatile -fno-builtin -Wall -I/h   -I. 
+-I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=MC68060     
+-c recoverExcDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <recoverExcDemo.o
+value = 662336 = 0xa1b40
+-> recoverDemo()
+
+Exception number 4: Task: 0x1fb57b4 () 
+
+Illegal Instruction
+Status Register     : 0
+value = 0 = 0x0
+ 
+The Output on Console:
+======================
+demo_recover...
+demo_recover...setup sigvec
+causing bus error
+
+Signal SIGILL received
+recover from signal 4. val = 50 
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1603
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	     make CPU=PPC603 recoverExcDemo.o
+
+%make CPU=PPC603 recoverExcDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope  
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC603  -DMV1600 
+-DTARGET_DIR="\"mv1603\""   -c recoverExcDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <recoverExcDemo.o
+value = 662248 = 0xa1ae8
+-> recoverDemo ()
+
+Exception number 1792: Task: 0x5d1ca0 () 
+
+program
+program counter:  0xffffffff
+machine status:   0
+value = 0 = 0x0
+
+The Output on Console:
+======================
+demo_recover...
+demo_recover...setup sigvec
+causing bus error
+
+Signal SIGILL received
+recover from signal 4. val = 50 
+
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv2604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+             ccppc -c -I/petaluma1/mayur/tor101/target/h -DCPU=PPC604 -c recoverExcDemo.c
+
+%ccppc -c -I/petaluma1/mayur/tor101/target/h -DCPU=PPC604 -c recoverExcDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+-> ld <recoverExcDemo.o
+value = 662184 = 0xa1aa8
+-> recoverDemo()
+
+Exception number 1792: Task: 0xbe7c20 () 
+
+program
+program counter:  0xffffffff
+machine status:   0
+value = 0 = 0x0
+
+The Output on Console:
+======================
+demo_recover...
+demo_recover...setup sigvec
+causing bus error
+
+Signal SIGILL received
+recover from signal 4. val = 50 
+
+
+TESTED ON - Host/Target : Solaris 2.5.1 /mv2603
+	    VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	    ccppc -c -I/petaluma1/mayur/tor101/target/h -DCPU=PPC604 -c recoverExcDemo.c
+
+% ccppc -c -I/petaluma1/mayur/tor101/target/h -DCPU=PPC604 -c recoverExcDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld< recoverExcDemo.o
+value = 661544 = 0xa1828
+-> recoverDemo()       
+
+Exception number 1792: Task: 0xbe7d28 () 
+
+Unknown floating point exception
+program counter:  0xffffffff
+machine status:   0xbe7c48
+FP status & ctrl: 0
+value = 0 = 0x0
+
+The Output on Console:
+======================
+demo_recover...
+demo_recover...setup sigvec
+causing bus error
+
+Signal SIGILL received
+recover from signal 4. val = 50 
+
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1603
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	     ccppc -c -I/petaluma1/mayur/tor101/target/h -DCPU=PPC604 -c recoverExcDemo.c
+
+%ccppc -c -I/petaluma1/mayur/tor101/target/h -DCPU=PPC604 -c recoverExcDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+-> ld <recoverExcDemo.o
+value = 662184 = 0xa1aa8 = in_losing + 0x2c
+-> recoverDemo ()
+
+Exception number 1792: Task: 0x5cc8d8 () 
+
+Unknown floating point exception
+program counter:  0xffffffff
+machine status:   0x5cc7f8
+FP status & ctrl: 0
+value = 0 = 0x0
+
+The Output on Console:
+======================
+demo_recover...
+demo_recover...setup sigvec
+causing bus error
+
+Signal SIGILL received
+recover from signal 4. val = 50 
+

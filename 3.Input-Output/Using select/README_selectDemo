@@ -1,0 +1,56 @@
+FILE LIST -
+              selectDemo.c
+
+DESCRIPTION -
+	      This program demonstrates the usage of the select() routine.
+	      The selectDemo task writes messages to pipe devices. The
+	      selectOnReadFds task blocks on the select routine and then
+	      reads a message only from the pipe devices that are ready
+	      for reading.
+
+RUNNING DEMO -
+	      Place the selectDemo.c in your <Tornado> dir. Depending on
+	      the target you have, define the CPU in your compile line
+	      and use the Makefile in the BSP dir. to compile.
+
+	      To run this code invoke the function selectDemo().
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+    	      make CPU=PPC604 selectDemo.o
+
+% make selectDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c selectDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <selectDemo.o
+value = 716888 = 0xaf058
+-> selectDemo
+
+The Output on Console:
+======================
+"/pipe/1" pipe device created
+"/pipe/2" pipe device created
+
+Value of the fd for /pipe/1 = 10 
+Value of the fd for /pipe/2 = 11 
+
+selectOnReadFds: Number of bits (in fd_set struct) to be tested = 12
+0 : To quit this Demo
+1 : To write a message to "/pipe/1"
+2 : To write a message to "/pipe/2"
+3 : To write a message to "/pipe/1" and "/pipe/2"
+Enter your choice :
+

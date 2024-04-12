@@ -1,0 +1,266 @@
+VxWorksDemo-MIB 
+
+--FORCE INCLUDE <mib.h>
+--FORCE INCLUDE <snmpdefs.h>
+--FORCE INCLUDE "mibhand.h"
+
+DEFINITIONS ::= BEGIN
+
+-- TITLE:	DEMO MIB TO INCLUDE MEMORY GROUP
+
+IMPORTS
+	MODULE-IDENTITY, OBJECT-TYPE, Integer32, Unsigned32
+	FROM SNMPv2-SMI
+		enterprises
+			FROM RFC1155-SMI
+
+		DisplayString
+			FROM RFC1213-MIB
+			;
+
+
+wrs	OBJECT IDENTIFIER ::= { enterprises 731 }
+demos	OBJECT IDENTIFIER ::= { wrs 1 }
+
+windDemo	MODULE-IDENTITY
+	LAST-UPDATED	"9708250000Z"
+	ORGANIZATION	"WIND RIVER SYSTEMS"
+	CONTACT-INFO	"Technical Support"
+	DESCRIPTION
+		" This is an example module to include the memory group "
+	::= { demos 1 }
+
+windObjects	OBJECT IDENTIFIER ::= { windDemo 1 }
+
+-- Groups defined in this MIB
+
+sysTask	OBJECT IDENTIFIER ::= { windObjects 1 } 
+
+
+--	Task Group
+
+--	This group provides access to the target's task table.
+--	Tasks can be suspended, created, resumed and deleted. 
+--	Individual parameters can also be changed. While changing 
+--	task information, it should be remembered that the information 
+--	from this group is only a snapshot of the task table entries. 
+--	VxWorks tasks can be created by creating an entry in the 
+--	tasktable. An entry should be created with an index of zero. 
+--	The other parameters that must be specified are: name, priority,
+--	 stacksize, entry point and other options.
+
+
+taskTable		OBJECT-TYPE
+	SYNTAX		SEQUENCE OF TaskEntry
+	MAX-ACCESS	not-accessible
+	STATUS		current
+	DESCRIPTION
+		"Represents the target's task table. Each entry in this table represents a task"
+	::= { sysTask 1 }
+
+taskEntry		OBJECT-TYPE
+	SYNTAX		TaskEntry
+	MAX-ACCESS	not-accessible
+	STATUS		current
+	DESCRIPTION
+		" Each entry contains information with regards to a task in the system "
+	INDEX		{ taskId }
+	::= { taskTable 1 }
+
+TaskEntry ::=
+	SEQUENCE {
+		taskId
+			Integer32,
+		taskName
+			DisplayString,
+		taskPriority
+			Integer32,
+		taskStatus
+			INTEGER,
+		taskOptions
+			Integer32,
+		taskMain
+			DisplayString,
+		taskStackPtr
+			Unsigned32,
+		taskStackBase
+			Unsigned32,
+		taskStackPos
+			Unsigned32,
+		taskStackEnd
+			Unsigned32,
+		taskStackSize
+			Unsigned32,
+		taskStackSizeUsage
+			Unsigned32,
+		taskStackMaxUsed
+			Unsigned32,
+		taskStackFree
+			Unsigned32,
+		taskErrorStatus
+			Integer32
+	}
+
+taskId 			OBJECT-TYPE
+	SYNTAX		Integer32
+	MAX-ACCESS  	read-only
+	STATUS		current
+	DESCRIPTION
+		" This is the task ID assigned by VxWorks to a task in the
+		  system. A taskId of zero specifies a new task."
+	::= { taskEntry 1 }
+
+taskName		OBJECT-TYPE
+	SYNTAX		DisplayString
+	MAX-ACCESS	read-write
+	STATUS		current
+	DESCRIPTION
+		" This is the name of the VxWorks task.  This value can
+		 only be specified (set) at task creation."
+	::= { taskEntry 2 }
+
+taskPriority		OBJECT-TYPE
+	SYNTAX		Integer32
+	MAX-ACCESS	read-write
+	STATUS		current
+	DESCRIPTION
+		"The priority of the VxWorks task.  This value can be
+		 in the range from 0, the highest priority,
+		 to 255, the lowest priority."
+	::= { taskEntry 3 }
+
+taskStatus		OBJECT-TYPE
+	SYNTAX		INTEGER {
+				task-ready(1),      -- Task is ready to run.
+				task-suspended(2),  -- Task is suspended.
+				task-delay(3),      -- Task is delayed.
+				task-deleted(4)     -- Task is to be deleted.
+			}
+	MAX-ACCESS	read-write
+	STATUS		current
+	DESCRIPTION
+		"This field specifies the current task status.  It
+		 can be used to change the current task state.
+		 For example, to suspend a task, the value of
+		 taskStatus is changed to task-suspended,
+		 to delete a task the value is changed to
+		 task-deleted, etc..."
+	::= { taskEntry 4 }
+
+taskOptions		OBJECT-TYPE
+	SYNTAX		Integer32
+	MAX-ACCESS	read-write
+	STATUS		current
+	DESCRIPTION
+		"This value represents the sum of the following
+		 options:
+
+			value      option
+			 1        VX_SUPERVISOR_MODE(read-only)
+			 2        VX_UNBREAKABLE    (break points ignored)
+			 4        VX_DEALLOC_STACK  (deallocate stack)
+			 8        VX_FP_TASK        (floating point support)
+			16        VX_STDIO          (read-only)
+			128        VX_PRIVATE_ENV    (private env. variables)
+			256        VX_NO_STACK_FILL  (don't fill stack)
+
+		 All the options above can be set at task creation time.
+		 However, once the task is executing the only option
+		 that can be changed is VX_UNBREAKABLE.  The option is
+		 toggled based on the current setting."
+	::= { taskEntry 5 }
+
+taskMain		OBJECT-TYPE
+	SYNTAX		DisplayString
+	MAX-ACCESS	read-write
+	STATUS		current
+	DESCRIPTION
+		"This is the name of the entry function for the VxWorks
+	 	 task.  This name can only be specified when a task
+		 is created (entry added in the table).  The symbol
+		 must exist in the VxWorks target."
+	::= { taskEntry 6 }
+
+taskStackPtr		OBJECT-TYPE
+	SYNTAX		Unsigned32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"This is the saved stack pointer for the task."
+	::= { taskEntry 7 }
+
+
+taskStackBase		OBJECT-TYPE
+	SYNTAX		Unsigned32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"This is the address of the bottom of the stack of
+		 the VxWorks task."
+	::= { taskEntry 8 }
+
+taskStackPos		OBJECT-TYPE
+	SYNTAX		Unsigned32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"This is the effective top of the stack in the current
+		 task state."
+	::= { taskEntry 9 }
+
+taskStackEnd		OBJECT-TYPE
+	SYNTAX		Unsigned32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"This is the address of the top of the stack of the
+		 VxWorks task."
+	::= { taskEntry 10 }
+
+taskStackSize		OBJECT-TYPE
+	SYNTAX		Unsigned32
+	MAX-ACCESS	read-write
+	STATUS		current
+	DESCRIPTION
+		"This is the actual size of the stack in bytes.  The
+		 size of the stack can only be specified at task
+		 creation (adding an entry to the table)."
+	::= { taskEntry 11 }
+
+taskStackSizeUsage	OBJECT-TYPE
+	SYNTAX		Unsigned32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"The number of bytes currently in use by the task from 
+		 the stack."
+	::= { taskEntry 12 }
+
+taskStackMaxUsed	OBJECT-TYPE
+	SYNTAX		Unsigned32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"This is the maximum number of bytes that have been used
+		 by the task from the stack."
+	::= { taskEntry 13 }
+
+taskStackFree		OBJECT-TYPE
+	SYNTAX		Unsigned32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"This is the number of bytes that are free currently in 
+		 the task stack."
+	::= { taskEntry 14 }
+
+taskErrorStatus		OBJECT-TYPE
+	SYNTAX		Integer32
+	MAX-ACCESS	read-only
+	STATUS		current
+	DESCRIPTION
+		"This is the most recent error status for this task."
+	::= { taskEntry 15 }
+
+
+END

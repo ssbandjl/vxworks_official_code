@@ -1,0 +1,71 @@
+FILE LIST -
+        buffSend.c
+	buffReceive.c
+
+DESCRIPTION -
+	     The following code example uses memory from the shared memory
+	     system partition to share data between tasks on different
+	     CPUs.  The first member of the data structure is a shared
+	     semaphore that is used for mutual exclusion. The send task
+	     creates and initializes the structure. The receive task simply
+	     accesses the data and displays it.
+             
+RUNNING DEMO -
+	     Place the buffSend.c and buffReceive.c in your <Tornado> dir. 
+	     Depending on the target you have, define the CPU in your compile
+	     line and use the Makefile in the BSP dir. to compile.
+
+	     Add INCLUDE_SM_NET , INCLUDE_SM_SEQ_ADDR and INCLUDE_SM_OBJ
+	     in the config.h file in the BSP
+
+	     Install VxMP into your Tornado tree before running this code.
+             
+	     Re-make vxWorks and reboot your system.
+
+	     The file buffSend.c writes to the shared memory. The function
+   	     buffSend() writes to the shared semaphore protected buffer.
+
+             The file buffReceive.c reads the shared memory. The function
+             buffReceive() receives shared semaphore protected buffer.
+
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1604
+	     VxWorks     : 5.3.1
+
+             EXAMPLE COMPILE LINE - 
+			    make CPU=PPC604 buffSend.o
+			    make CPU=PPC604 buffReceive.o
+
+% make buffSend.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c buffSend.c
+
+% make buffReceive.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c buffReceive.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+-> ld <buffSend.o
+value = 8380672 = 0x7fe100 = buffReceive + 0x8f0
+
+
+On VxWorks target:
+==================
+-> ld <buffReceive.o
+value = 8381792 = 0x7fe560 = buffReceive + 0xd50
+
+
+

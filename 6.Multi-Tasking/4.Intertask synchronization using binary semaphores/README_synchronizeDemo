@@ -1,0 +1,84 @@
+FILE LIST -
+	      synchronizeDemo.c
+
+DESCRIPTION -
+	      This demo demonstrates the intertask synchronization using binary
+	      semaphores.
+
+	      It creates two (semId1 and semId2) binary semaphores for intertask
+	      synchronization between two tasks (taskA and taskB). taskA needs
+	      to execute
+	      an event (event A). On completion of event A, taskB needs to execute
+	      another event (event B). On completion of the event B, taskA needs to
+	      execute event A. This process needs to be done iteratively. SynchronizeDemo
+	      executes this process.
+
+	      To run the code invoke the function synchronizeDemo().
+
+RUNNING DEMO -
+	      Place the synchronizeDemo.c file in your <Tornado> dir.  
+	      Depending on the target
+	      you have, define the CPU in your compile line and use the 
+	      Makefile in the <tornado> directory to compile the code.
+
+	      Run synchronizeDemo () on vxworks target.
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+	      EXAMPLE COMPILE LINE - (use the Makefile in the BSP)
+			    make CPU=PPC604 synchronizeDemo.o
+
+% make synchronizeDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c synchronizeDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <synchronizeDemo.o 
+value = 708664 = 0xad038 = tcpstates + 0x28
+-> synchronizeDemo
+value = 0 = 0x0
+
+The Output on Console:
+======================
+
+taskA: Started first by taking the semId1 semaphore - 1 times
+This is task  <tTaskA> : Event A now done
+taskA: I'm done, taskB can now proceed; Releasing semId2 semaphore
+
+taskB: Synchronized with taskA's release of semId2 - 1 times
+This is task  <tTaskB> : Event B now done
+taskB: I'm done, taskA can now proceed; Releasing semId1 semaphore
+
+
+taskA: Started first by taking the semId1 semaphore - 2 times
+This is task  <tTaskA> : Event A now done
+taskA: I'm done, taskB can now proceed; Releasing semId2 semaphore
+
+taskB: Synchronized with taskA's release of smes
+This is task  <tTaskB> : Event B now done
+taskB: I'm done, taskA can now proceed; Releasing semId1 semaphore
+
+
+taskA: Started first by taking the semId1 semaphore - 3 times
+This is task  <tTaskA> : Event A now done
+taskA: I'm done, taskB can now proceed; Releasing semId2 semaphore
+
+taskB: Synchronized with taskA's release of semId2 - 3 times
+This is task  <tTaskB> : Event B now done
+taskB: I'm done, taskA can now proceed; Releasing semId1 semaphore
+
+
+
+
+ synchronizeDemo now completed 
+

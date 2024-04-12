@@ -1,0 +1,12 @@
+xxInit
+
+
+ChapInit(unit)
+
+
+ether_ifattach
+
+net driver entry:
+void ether_attach (ifp, unit, name, initRtn, ioctlRtn, outputRtn, resetRtn)
+if_attach (ifp)
+

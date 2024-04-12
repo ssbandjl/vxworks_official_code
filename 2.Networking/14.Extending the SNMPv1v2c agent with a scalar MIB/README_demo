@@ -1,0 +1,37 @@
+
+FILE LIST -
+
+              Makefile.demo  demo.c demo.mib
+
+DESCRIPTION -
+              This demo shows how to do a MIB extension to the SNMP agent 
+              using a scalar custom MIB. This example is described in the 
+              SNMPv1/v2c Component Release Supplement 1.0 Chapter 6 -
+              Extending the WindNet SNMPv1/v2c Agent.
+              Use the 6 steps provided in the chapter to make the MIB 
+              extension.  The Makefile in the /snmpv1/agent/ dir has
+              been edited to Makefile.demo to include demo.mib and demo.o
+              Do a "make clean" in your agent and vxWorks image dir
+              before you build a new SNMP agent and integrage it to VxWorks. 
+  
+RUNNING DEMO - 
+              Follow the steps in Section 6.3 Compile-time MIB Extensions
+              of the SNMPv1/v2c Component Release Supplement 1.0 
+
+TESTED ON -  Host/Target : Solaris 2.5 / mv162
+             VxWorks     : 5.3.1
+
+
+EXAMPLE COMPILE LINE -
+             In the /snmpv1/agent dir - make CPU=MC68040 TOOL=gnu
+
+
+OUTPUTS/LOGFILE -
+
+% snmpwalk demos
+
+sysState.0      Number: system-running(1)
+sysUserName.0           String(6): rajesh
+sysUserPassw.0          String(0):
+No more in MIB
+

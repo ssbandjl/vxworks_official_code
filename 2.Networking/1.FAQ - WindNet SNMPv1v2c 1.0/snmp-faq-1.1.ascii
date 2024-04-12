@@ -1,0 +1,1879 @@
+                      ----------------------
+                      WindNet SNMP FAQ # 1.1
+                      ----------------------
+                      Numbers: 1 to 29
+
+This is a FAQ for WindNet SNMPv1/v2c 1.0 FCS, and this version is supported
+on Tornado 1.0 and 1.0.1. In addition to these questions you can find
+example code from the SNMP user's guide in the "Techpubs" area online. 
+Forward your comments to support@wrs.com 
+
+
+==========================================================================
+
+1.  TITLE: WindNet SNMP agent versions and releases, what is supported ? 
+
+2.  TITLE: Building the snmp agent gives " out of environment space " error.
+
+3.  TITLE: Missing parameter information for user hooks in snmpdInitFinish.
+
+4.  TITLE: How does WindNet SNMP agent interface with network drivers 
+           and MIB2.
+
+5.  TITLE: getproc_got_string manpage missing how snmpdMemoryFree is used. 
+
+6.  TITLE: The trap processing is missing a reference to the hook for 
+           releasing privately allocated memory.
+
+7.  TITLE: nextproc_next_instance() does not explain the reference point 
+           of the instance.
+
+8.  TITLE: snmpSet() and snmpTest() in snmpSnmp.c have incorrect code. 
+
+9.  TITLE: SNMPv1/v2c 1.0 demo MIB exmaple from the user guide does 
+           not compile.
+
+10. TITLE: snmpGroupedVbsProcess() prototype defined in snmpdLib.h is 
+           not found.
+
+11. TITLE: Prototype for snmpdContinue() is missing in snmpdLib.h.
+
+12. TITLE: What can I do to make the -stub option generate method 
+           routines for the SNMP trap objects.
+
+13. TITLE: When to use non-asynch functions, %n or %N option.  
+
+14. TITLE: How is the cookie variable used. 
+
+15. TITLE: Why would one want to use the -skel output format for the 
+           mibcompiler.
+
+16. TITLE: How to add support for counters and MIB-II in custom network 
+           drivers such as token ring, ethernet etc.
+
+17. TITLE: How does the snmpdGroupByGetprocAndInstance() function work ?
+
+18. TITLE: Missing documentation for snmpNextIndex in SNMPv1/v2c 1.0.
+
+19. TITLE: Why is snmpIoCommunityValidate() not returning a response PDU 
+           to the SNMP manager ?
+
+20. TITLE: Compiling custom and standard MIBs gives errors.
+
+21. TITLE: mibleaf.h file is missing in the /snmpv1/agent/ directory.
+
+22. TITLE: How to use non-ip interfaces in the MIB ifTable.
+
+23. TITLE: Problem using ipAddrTable in snmpIp.c. 
+
+24. TITLE: SNMP MIB compiler fails on UInteger32 in rfc1447 MIB definition.
+
+25. TITLE: SNMP MIB compiler complains about BITS in the MIB definition. 
+
+26. TITLE: m2Init does not initialze the maxRouteTableSize value correctly. 
+
+27. TITLE: How to set the priority of the tSnmpd task at vxWorks boot time. 
+
+28. TITLE: How are the driver counters used for MIB2 interfaces ? 
+
+29. TITLE: Why the SET request from a SNMP manager does not get a 
+           response from the SNMP agent ?
+
+==========================================================================
+
+
+1. TITLE: WindNet SNMP agent versions and releases, what is supported ? 
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  5.2, 5.3. 5.3.1
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM: 
+
+Which versions of the snmp agent can I use with Vxworks and Tornado. 
+
+RESOLUTION: 
+
+Check your WindNet SNMP user guide and Tornado installation guide.
+
+VxWorks 5.2   - uses WindNet SNMP 1.0  
+Tornado 1.0   - uses WindNet SNMPv1/v2c 1.0 
+Tonnado 1.0.1 - uses WindNet SNMPv1/v2c 1.0 (NOTE - The SNMP agent version
+                is the same as in Tornado 1.0 because agent was not modified. 
+                But this optional product is re-released for Tornado 1.0.1. 
+                If you are running the SNMP agent that was released for 
+                Tornado 1.0 in Tornado 1.0.1, it will ** NOT WORK **. 
+
+VxWorks 5.2          - uses SNMP protocol version v1 and v2  
+Tornado 1.0, 1.0.1   - uses SNMP protocol version v1 and v2c 
+
+VxWorks 5.2          - based on bilingual monolithic agent release 12.1.11 
+                          from SNMP Research 
+
+Tornado 1.0, 1.0.1   - based on  bilingual monolithic agent from Epilogue 
+                          Epilogue agent version         7.0  
+                          Epilogue mib compiler version  6.0
+
+Not yet supported    - Masteragent-subagent technology.
+
+NOTE - If you have snmp applications (method routines) running on 
+       5.2 VxWorks using the agent based on SNMP Research, the routines
+       are not compatible with the Epilogue based snmp agent in Tornado 1.0
+       and 1.0.1. See the WindNet SNMPv1/v2c 1.0 release notes. 
+
+KEYWORDS: Envoy Emissary mibcomp mib2 snmpv1v2c snmpv2  
+
+--------------------------------------------------------------------------
+
+2. TITLE: Building the snmp agent gives " out of environment space " error.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  Windows 95              Windows 95
+                     -------------------     -------------------
+      ARCHITECTURE:  All                     ads360
+                     -------------------     -------------------
+               BSP:  All                     ads360
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMPv1/v2c 1.0 FCS      Tornado 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM: 
+
+After WindNet SNMP v1/v2c agent is installed,
+torVars on the msdos window gives "out of environment space" error. And
+when the snmp agent is built using the makefile in /target/src/snmpv1/agent
+the following error is displayed :
+...
+Out of environment space
+Out of environment space
+Out of environment space
+Out of environment space
+Out of environment space
+Out of environment space
+Bad command or file name
+File creation error
+File creation error
+
+
+RESEARCH: The dos shell is running out of environment space
+
+RESOLUTION: 
+
+In your msdos window do the following ...
+1. Point to the title bar of the dos window and click the right mouse button.
+2. Now you should have a pop up menu with the last option as "Properties"
+3. Click on Properties and a "MS-DOS Prompt Properties" window will pop up.
+   - This window will have 5 tab buttons, click on the "Memory" button
+   - Now you will see 4 different boxes for memory settings
+   - Go to the "Conventional memory" box, and there is an "Intial Environment"
+     setting; change the setting from "Auto" or any other number to the highest
+     value (4096) by selecting from it's pull down list.
+4. Click on the "Apply" button.
+5. Restart the dos command prompt window
+6. Set the environment variables for Tornado executing torVars, it is located
+   in your Tornado's /host/x86-win32/bin/ directory.
+7. Rebuild the snmp agent.
+
+SPR / PATCH:
+
+KEYWORDS: compile NT windows95 make makefile fails environment variables
+
+--------------------------------------------------------------------------
+
+3. TITLE: Missing parameter information for user hooks in snmpdInitFinish.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0          snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+In WindNet SNMPv1/v2c Component Release Supplement, Section 4.8 HOOKS,
+pg 29.  We are allowed 5 hooks to user supplied routines to be used in
+the "SET" processing sequence.  What are the parameters passed to these
+routines? The manpage for snmpdInitFinish does not describe the parameters
+for the hooks.
+
+RESOLUTION: 
+
+The parameter to the hook routines is a pointer to the snmp packet
+you are processing.
+
+
+LOCAL VOIDFUNCPTR   snmpHkPrivRlseRtn;     /* user hook private release rtn */
+LOCAL FUNCPTR       snmpHkSetPduVldtRtn;   /* user hook set pdu validate rtn */
+LOCAL FUNCPTR       snmpHkPreSetRtn;       /* user hook pre set rtn */
+LOCAL FUNCPTR       snmpHkPostSetRtn;      /* user hook post set rtn */
+LOCAL FUNCPTR       snmpHkSetFailedRtn;    /* user hook set failed rtn */
+
+
+void snmpdInitFinish
+    (
+    VOIDFUNCPTR    pPrivRlse,     /* user's privare release routine */
+    FUNCPTR        pSetPduVldt,   /* user's set pdu validate routine */
+    FUNCPTR        pPreSet,       /* user's pre set routine */
+    FUNCPTR        pPostSet,      /* user's post set routine */
+    FUNCPTR        pSetFailed     /* user's set failed routine */
+    )
+    {
+    snmpHkPrivRlseRtn = pPrivRlse;
+    snmpHkSetPduVldtRtn = pSetPduVldt;
+    snmpHkPreSetRtn = pPreSet;
+    snmpHkPostSetRtn = pPostSet;
+    snmpHkSetFailedRtn = pSetFailed;
+
+    snmpIoTrapSend (COLD_START, 0);
+    snmpMibsInit ();
+    }
+
+The parameters to the routines in snmpdInitFinish for all the 5 hook routines  
+are pointers to the snmp packet you are processing ...
+
+* snmpHookPrivRelease - release private memory used by hooks
+*
+* This routine is used by the agent to free any memory attached to the
+* private field of the SNMP_PKT_T structure.  This routine must be
+* provided by the user, if it is required.
+
+void snmpHookPrivRelease
+    (
+    SNMP_PKT_T  *pPkt    /* snmp packet */
+    )
+
+
+* snmpHookSetPduValidate - validate a `set' request PDU
+*
+* This routine is called before any processing of a `set' request has
+* taken place.  It can be used to perform global validation of the
+* request, if needed.  This routine must be provided by the user, if
+* it is required.
+*
+* RETURNS:
+*   0 indicates that the `set' PDU is valid, and processing should continue.
+*   1 indicates that the `set' PDU is valid, and that this routine has
+*   already completed all the required `set' operations.
+*   -1 indicates that the `set' PDU is invalid and should be rejected.
+*
+
+int snmpHookSetPduValidate
+    (
+    SNMP_PKT_T *     pPkt
+    )
+
+* snmpHookPreSet - perform user-specified actions before a `set' operation
+*
+* This routine is called after all `testproc' operations have
+* completed successfully, but before any `setproc' operation is begun.
+* This routine must be provided by the user, if it is required.
+*
+* RETURNS:
+*   0 indicates that the `set' PDU is valid, and processing should continue.
+*   1 indicates that the `set' PDU is valid, and that this routine has
+*   already completed all the required `set' operations.
+*   -1 indicates that the `set' PDU is invalid and should be rejected.
+*
+
+int  snmpHookPreSet
+    (
+    SNMP_PKT_T *    pPkt
+    )
+
+* snmpHookPostSet - perform user-specified actions after a `set' operation
+*
+* This routine is called after all `setproc' have completed
+* successfully. This routine can be used to free resources allocated
+* during `set' processing.  This routine must be provided by the user,
+* if it is required.
+*
+
+int  snmpHookPostSet
+    (
+    SNMP_PKT_T *     pPkt
+    )
+
+* snmpHookSetFailed  - perform user-specified actions on failure of a 
+                       `set' operation
+*
+* This routine is possibly called under two sets of circumstances:
+* after all `testproc' operations have returned and some of them have
+* failed, and/or after all `undoproc' operations have returned and
+* some `setproc' operations have failed.  It can be used to do any
+* required cleanup.  This routine must be provided by the user, if it
+* is required.
+*
+
+int  snmpHookSetFailed
+    (
+    SNMP_PKT_T *     pPkt
+    )
+
+
+SPR / PATCH: 8480
+
+KEYWORDS: snmp v1v2c v1 v2 mib 
+
+--------------------------------------------------------------------------
+
+4. TITLE: How does WindNet SNMP agent interface with network drivers 
+          and MIB2. 
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+The user is setting up the system so that there are two SNMP Managers
+running on two separate nodes, though only one will be used at any one
+time.  How to get our agent to switch from talking to one to start talking 
+to the other.  Would this just work?  In other words could our agent receive 
+SNMP requests from both managers and respond to the appropriate one? 
+
+Exactly what should be added to the driver to support the FDDI MIB ? How to
+update the FDDI MIB ? 
+
+We use FDDI as our physical network interface.  We wish to use SNMP to
+monitor the status of the FDDI interface. Thus we need know how the
+FDDI driver updates the FDDI MIB statistics. The WindNet SNMP documents does
+not give more details other than this in the WindNet SNMP Release
+
+Notes 1 Section 5:
+"Existing network drivers and drivers under development must provide
+ MIB-II support."
+
+Since FDDI MIB is not included in the MIB-II, what ioctl commands does
+WindNet SNMP or VxWorks provide for the FDDI driver to support FDDI-MIB?  
+Should there be more data structures defined specifically for FDDI?
+From these paragraphs, I assume VxWorks supports MIB-II (all MIB groups)
+using ioctl commands.  Are the 2 structures specified in the Release Note 1
+sufficient to support all other MIB-II parameters?  Are there any
+commands,
+other than SIOCGMIB2CNFG and GIOCGMIB2CNTRS, for other MIB-II variables?
+
+
+
+RESOLUTION:
+
+SNMP uses UDP and responds to all the queries on a transaction basis. Any
+number of SNMP managers can talk to the SNMP agent.
+
+There are three things going on here:
+
+1) The TCP/IP MIB is called the MIB-II, and this is what is shipped by
+   VxWorks. This MIB defines information for all the IP interfaces in the 
+   systems. Whether they are ethernet, token ring, fddi, ppp, ..etc.  
+   Each interface is responsible for providing this information in their IP 
+   interface driver with the IOCTL described in the release notes.  
+   The interface MIB support is described in MIB-II RFC which is rfc1213.
+
+2) An FDDI driver is more complicated than an ethernet driver.  
+   It requires a protocol of its own to maintain ring communications.  
+   This protocol is call Station Management (SMT).  This protocol has a MIB of 
+   its own and it is defined RFC-1512.  
+   Look in target/src/snmpv1/mibs/rfc1512.mib
+   This is a MIB which requires new development and is independet of MIB-II.
+
+3) There are SNMP FDDI station variables which defines a MIB, this
+   MIB is define in RFC-1285. Again these are FDDI station specific
+   parameters and have nothing to do with the IOCTL that is sent from the 
+   MIB-II parameter interface definitions.
+
+NOTE - The FDDI MIB is not part of the TCP/IP MIB.  FDDI MIB is independent and
+       the user needs to develop the MIB.  The FDDI MIB is defined in the 
+       RFC-1285,1512,1558.
+       
+       At the time of writing this FAQ the BSP Porting Kit is for Tornado 1.0.1
+       is not yet published for users. The BSP Port. Kit document should 
+       include the details on how to add a custom network interaface driver
+       to VxWorks.
+
+SPR / PATCH: 3452
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+5. TITLE: getproc_got_string manpage missing how snmpdMemoryFree is used. 
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+In WindNet SNMPv1/v2c Component Release Supplement, SNMP Libraries
+Reference, pg 160, getproc_got_string.  The "dynamicFlg" tells the agent
+that snmpdMemoryAlloc was used to allocate memory for the data buffer.
+It also says that snmpdMemoryFree should be called to free it.  Who calls
+snmpdMemoryFree?  If the SNMP designer needs to add this call, where
+should he add it? What is meant by "freed later" ?
+
+RESEARCH:
+
+RESOLUTION:
+
+The snmpdMemoryFree is called by the agent when the packet processing
+is finished i.e. when the agent has finished generating the response
+packet for the request (this is what means by "freed later").
+It is not clear from the man page who is calling the free routine and
+Note that snmpdMemoryFree is distributed in snmpIoLib.c and the user
+can write their own free routine if they do not want to use the one provided 
+by WindNet snmp agent.
+
+SPR / PATCH:  8484
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+6. TITLE: The trap processing is missing a reference to the hook for 
+          releasing privately allocated memory.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+In WindNet SNMPv1/v2c Component Release Supplement, Section 4.12.8
+Trap Processing, pg 42, Figure 4-4.  The diagram shows an optional hook
+to release privately-allocated memory.  How do I tell the SNMP Agent
+about this Hook and what are the parameters? Reference to this optional
+hook is missing in the trap processing section on pg 41.
+
+RESOLUTION:
+
+snmpdInitFinish() and pPrivRlse can be used to release privately
+allocated memory. The section 4.10.4 on VarBind Private Field for set
+operations talks about private-memory-deallocation hook. The same process
+can be used for trap processing also, see pg. 34.
+
+SPR / PATCH: 8485
+
+--------------------------------------------------------------------------
+
+7. TITLE: nextproc_next_instance() does not explain the reference point 
+          of the instance.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+In WindNet SNMPv1/v2c Component Release Supplement, SNMP Libraries
+Reference, pg 165.  nextproc_next_instance:  What is the reference point
+of the instance?  Is it the next instance related to the instance passed
+into the getproc procedure, or is it the next instance relating to the
+instance found?
+
+RESOLUTION: 
+
+It is instance found.
+nextproc_next_instance(pktp, vbp, GroupEntry_INSTANCE_LEN, next_inst);
+
+The instance part described here should be the instance part of the
+next value that is retrieved.
+
+SPR / PATCH: 8486
+
+--------------------------------------------------------------------------
+
+8. TITLE: snmpSet() and snmpTest() in snmpSnmp.c have incorrect code. 
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  all
+                     -------------------     -------------------
+      ARCHITECTURE:  all
+                     -------------------     -------------------
+               BSP:  all
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0 FCS
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM: 
+
+Unable to SET the MIB variable snmpEnableAuthenTraps from the SNMP manager.
+The following problem is in snmpSnmp.c
+In function snmpSet() setproc_good() is missing.
+In function snmpTest() the logical operator is incorrect.
+
+RESEARCH:
+
+RESOLUTION:
+In snmpSet() the code should be ...
+
+    {
+    snmp_stats.snmpEnableAuthTraps = vbp->value_u.v_number;
+    setproc_good(pktp, vbp);
+    return;
+    }
+
+In snmpSet() the code should be ...
+
+    /* Check for the only 2 permissible values */
+
+    if ((vbp->value_u.v_number != VAL_snmpEnableAuthenTraps_enabled) &&
+        (vbp->value_u.v_number != VAL_snmpEnableAuthenTraps_disabled))
+       {
+       testproc_error (pktp, vbp, WRONG_VALUE);
+       return;
+       }
+
+
+SPR / PATCH: 8490, 8491
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+9. TITLE: SNMPv1/v2c 1.0 demo MIB exmaple from the user guide does 
+          not compile.
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMPv1/v2c 1.0          Tornado 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM: 
+
+The SNMP demo MIB example 6-4 (augmented demo.c with
+method routines) does not build when executing step 5.
+Example 6-1 demo.mib that is on the WEB (Windsurf)
+does not compile using mibcomp.
+
+RESOLUTION: A patch is available in support
+            Patched Modules - demo.mib and demo.c
+
+            The makefile in this patch can be used as a reference to modify
+            the Makefile that is in your agent dirctory. Follow
+            the instructions in Step 5 (pg 67) on how to build the snmp
+            the instructions in Step 5 (pg 67) on how to build the snmp
+            agent with the demo.c(method routines). And execute Step 6
+            to integrate the agent into vxworks.
+
+The following files should be distributed with this patch -
+demo.mib, demo.c, Makefile
+
+SPR / PATCH: 8373 / 5.3FCS-spr8373-snmpv1v2c-demo-mib
+--------------------------------------------------------------------------
+
+10. TITLE: snmpGroupedVbsProcess() prototype defined in snmpdLib.h is 
+           not found.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+In snmpdLib.h file the following prototype exists but it cannot be found
+in the snmp manual or vxworks image:     
+
+extern void     snmpGroupedVbsProcess (SNMP_PKT_T *, VB_T *, VOIDFUNCPTR, int);
+
+RESOLUTION:
+
+This is not a user function, this was used internally and it does
+not exist in the current product.
+
+SPR / PATCH: 8388
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+11. TITLE: Prototype for snmpdContinue() is missing in snmpdLib.h.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+Prototype for snmpdContinue is missing in snmpdLib.h and compiler warnings
+are generated. 
+
+
+RESOLUTION:
+
+A valid header file with the prototype is needed. 
+
+SPR / PATCH: 8041
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+12. TITLE: What can I do to make the -stub option generate method 
+           routines for the SNMP trap objects.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+We have a MIB, and by using -stub, method routines are generated for
+Objects, Table Objects, but not for TRAP ?
+What can I do to make it generate meothod routines for TRAP object ?
+
+RESOLUTION:
+
+The snmpv1/v2c 1.0 MIB compiler does not support the trap flag option so the 
+trap stub routines will not be created. However there is request for
+enhacement to provide this option. 
+
+SPR / PATCH: 8227
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+13. TITLE: When to use non-asynch functions, %n or %N option.  
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+snmpMib2.mib DEFAULTs are always 'asynch' and for the parent (%p) node.
+When would you use the non-asynch functions?  When would you use the %n or 
+%N option?  Does it depend whether the variable is scalar or a tabular leaf ?
+I've been using the defaults from snmpMib2.mib.
+
+
+RESOLUTION:
+
+Currently all method routines are synchronous. Synchronous functions
+can be used when you want sequential execution. For example if you have a
+GET process for OID 1.4.0 and 1.5.0, The method routine for 1.5.0 will not
+get invoked until method for 1.4.0 is done. 
+
+If you have asynchronous method routine for 1.4.0, it can return to the 
+main thread, and the task that was started off by this routine will go 
+about doing the necessary work for the response packet; While this is being 
+done you can have method routine for 1.5.0 invoked and not wait for 1.4.0 
+to finish.  The async version of the functions holds good for async 
+and non-async routines, so use async suffix.
+
+The difference beteween %n and %N is described in appendix A. of the WindNet
+SNMPv1/v2c Component Release Supplement 1.0 Edition 1
+
+You can use this for scalar or table variable.
+
+
+SPR / PATCH:
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+14. TITLE: How is the cookie variable used. 
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+As the cookie variable can set to "the address of a variable", 
+is this a good mechanism to set default values for non-volatile enterprise 
+mib-specific DisplayString variables?         
+
+ --DEFAULT cookie cookieVariable
+         ::= { myMib 3 }
+
+Also, in the snmpdTrapSend() discussion it states "pCookie is passed to 
+this routine (i.e., my trapVarBindsRtn() function) as shown below: 
+
+(*trapVarBindsRtn)
+    (pPkt [I'm assuming this is a typo for "pktp"), pCookie)"
+
+Since the SNMP_Bind_<data type> functions do not take "cookie"
+as an argument, don't understand how cookie is to be used here.
+
+
+RESOLUTION:
+
+The cookie is optional, i.e. you can pass a null if you do not want
+to use it. This is used for scalar variables and is conventionally
+used as an address of the management variable. You could use table values
+but you would need to take care of any indexing that is required for it.
+The cookie field can be used to keep data items which may be referred to
+in the method routines. You could for example keep the system group variables
+pointed to by these and get and set their values in their method routines.
+See macro VB_TO_COOKIE .
+
+   You can put the cookie definitions in a ctrl. file by force-including it
+from the file that defines it. 
+
+   pPkt is not a typo. 
+
+SPR / PATCH:
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+15. TITLE: Why would one want to use the -skel output format for the 
+           mibcompiler. 
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+What is the reason for using the -skel mibcomp option for the mib definitions. 
+
+
+RESOLUTION:
+
+  The -stub output format is most helpful in generating the
+stubs for the method routines. The -stub output is more helpful than
+the -skel option, with -skel you only get the function skeleton of method
+routines. In addition to this, the -start option would help focus the
+output to the subtree that you are trying to extend and not the whole
+mib.  
+
+For example the following compile line :
+
+mibcomp -l $WIND_BASE/target/src/snmpv1/mibs -stub -start wrs -o demo.c \
+rfc1155.smi rfc1213.mib demo.mib
+
+will have a stubs output starting from the module :
+
+wrs             OBJECT IDENTIFIER ::=   { enterprises 731 } 
+
+-skel gives the empty method functions to start with, where as the -stub
+starts with some of the method routines. Why someone would want to
+use -skel vs -stub is subjective i.e. if the user wants to start
+writing method routines from scratch then -skel can be used. These
+options do not inter-rleate. NOTE  You can use only one optput format each
+run of the mibcomp. The default option is -mib.c
+
+See the SNMPv1/v2c Component Release Supplement for more details on 
+how to use the mib compiler options.
+
+SPR / PATCH:
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+16. TITLE: How to add support for counters and MIB-II in custom network 
+           drivers such as token ring, ethernet etc.   
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+The user is writing a token ring network driver for VxWorks.
+We would like our network driver to support the MIB2 Interface
+parameters. Is there a description on what our driver should expect,
+and what values we should return? What data structures are received by the
+network drivers "ioctl" routine, and where is the the information
+returned? An example of another network drivers ioctl routine would
+certainly help.
+
+RESOLUTION:
+
+The Ethernet drivers need counters added to support the
+MIB-II compliance for SNMP.
+
+This document specifies a MIB-II interface for vxWorks network drivers.
+Current drivers do not count errors, number of bytes received, output etc.
+These and other miscellaneous parameters need to be provided by the network
+drivers so that the current implementation of the MIB-II services can be
+compliant to MIB-II specifications.
+
+To address the restriction that not all the network drivers can be updated
+simultaneously to provide MIB-II services, and to keep the current
+implementation independent of the order in which drivers are updated the
+following solution has been implemented.  All MIB-II variables currently not
+supported by the drivers will be accessed through the drivers'' ioctl function.
+The new ioctl commands will be kept private as it is an internal interface
+between the MIB-II library and the drivers.  This interface should only be
+advertised to customers that write network drivers for their BSPs.
+
+Network Driver IOCTL Commands
+-------------------------------
+
+Drivers that support MIB-II must include the file <private/m2LibP.h>, and
+<m2Lib.h>.  <The file private/m2LibP.h> contains the IOCTL commands and
+structures that the driver needs to support.
+
+The ioctl SIOCGMIB2CNFG  command and structure is only sent to the driver, each
+time the MIB-II library reads the list of network driver in the system.  In
+most systems this should only happen once.
+
+#define SIOCGMIB2CNFG   _IOR('m',  0, int)            /* Get Configuration */
+
+typedef struct
+    {
+    long            ifType;
+    M2_OBJECTID     ifSpecific;
+
+    } M2_NETDRVCNFG;
+
+The ioctl SIOCGMIB2CNTRS allows the MIB-II library to retrieve driver variables
+which can only be computed by the driver.  This command is sent to the driver
+each time the interface entry is read by the SNMP agent.
+
+
+#define SIOCGMIB2CNTRS  _IOR('m',  1, int)            /* Get driver counters */
+
+typedef struct
+    {
+    unsigned long   ifSpeed;
+    unsigned long   ifInOctets;
+    unsigned long   ifInNUcastPkts;
+    unsigned long   ifInDiscards;
+    unsigned long   ifInUnknownProtos;
+    unsigned long   ifOutOctets;
+    unsigned long   ifOutNUcastPkts;
+    unsigned long   ifOutDiscards;
+
+    } M2_NETDRVCNTRS;
+
+MIB-II Variable Specifications
+--------------------------------
+
+This section presents the defintions for each of the variables that need to be
+supported by the network drivers.
+
+ifType:
+This field describes the type of hardware that the driver is using.  The value
+of this field must be in the range shown below.  This values are defined in
+the file <m2Lib.h>
+
+#define M2_ifType_other                                 1
+#define M2_ifType_regular1822                           2
+#define M2_ifType_hdh1822                               3
+#define M2_ifType_ddn_x25                               4
+#define M2_ifType_rfc877_x25                            5
+#define M2_ifType_ethernet_csmacd                       6
+#define M2_ifType_iso88023_csmacd                       7
+#define M2_ifType_iso88024_tokenBus                     8
+#define M2_ifType_iso88025_tokenRing                    9
+#define M2_ifType_iso88026_man                          10
+#define M2_ifType_starLan                               11
+#define M2_ifType_proteon_10Mbit                        12
+#define M2_ifType_proteon_80Mbit                        13
+#define M2_ifType_hyperchannel                          14
+#define M2_ifType_fddi                                  15
+#define M2_ifType_lapb                                  16
+#define M2_ifType_sdlc                                  17
+#define M2_ifType_ds1                                   18
+#define M2_ifType_e1                                    19
+#define M2_ifType_basicISDN                             20
+#define M2_ifType_primaryISDN                           21
+#define M2_ifType_propPointToPointSerial                22
+#define M2_ifType_ppp                                   23
+#define M2_ifType_softwareLoopback                      24
+#define M2_ifType_eon                                   25
+#define M2_ifType_ethernet_3Mbit                        26
+#define M2_ifType_nsip                                  27
+#define M2_ifType_slip                                  28
+#define M2_ifType_ultra                                 29
+#define M2_ifType_ds3                                   30
+#define M2_ifType_sip                                   31
+#define M2_ifType_frame_relay                           32
+
+ifSpecific:
+A reference to MIB definitions specific to the particular media being used to
+realize the interface.  For example, if the interface is realized by an
+ethernet, then the value of this object refers to a document defining objects
+specific to ethernet.  If this information is not present, its value should be
+ set to the OBJECT IDENTIFIER { 0 0 }, which is a syntactically valid object
+identifier.
+
+The current default value used is the zero OBJECT IDENTIFIER
+
+
+ifSpeed:
+An estimate of the interface's current bandwidth in bits per second.  For
+interfaces which do not vary in bandwidth or for those where no accurate
+estimation can be made, this object should contain the nominal bandwidth.
+
+The current default value used for ethernet is 10000000.
+
+
+fInOctets:
+The total number of octets received on the interface, including framing
+characters.
+
+
+ifInNUcastPkts:
+The number of non-unicast (i.e., subnetwork- broadcast or subnetwork-multicast)
+packets delivered to a higher-layer protocol.
+
+
+ifInDiscards:
+The number of inbound packets which were chosen to be discarded even
+though no errors had been detected to prevent their being deliverable to a
+higher-layer protocol.  One possible reason for discarding such a packet
+could be to free up buffer space.
+
+
+ifInUnknownProtos:
+The number of packets received via the interface which were discarded because
+of an unknown or unsupported protocol.
+
+ifOutOctets:
+The total number of octets transmitted out of the interface, including framing
+characters.
+
+
+ifOutNUcastPkts:
+The total number of packets that higher-level protocols requested be
+transmitted to a non- unicast (i.e., a subnetwork-broadcast or
+subnetwork-multicast) address, including those that were discarded or not
+sent.
+
+
+ifOutDiscards:
+The number of outbound packets which were chosen to be discarded even
+though no errors had been detected to prevent their being transmitted.
+One possible reason for discarding such a packet could be to free up
+buffer space.
+
+
+SPR / PATCH: 3452
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+17. TITLE: How does the snmpdGroupByGetprocAndInstance() function work ?
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+Can you explain to me how snmpdGroupByGetprocAndInstance() is supposed to
+work. It was my understanding that it should put the vbrs with the same
+lastmatch and instance id on the same linked list.
+
+Lastmatch is a terminology used throughout the wrs snmpv1/v2c
+document and snmpd agent code. And the header of 
+snmpdGroupByGetprocAndInstance is not clear at all. 
+What does "This routine gathers a set of similar variable bindings together 
+"mean. I guess I don't understand what "similar" means. Does that mean 
+the same object as what is contained in the vbr ?
+
+
+RESOLUTION:
+
+This function call is useful for tables, it needs to be used within
+your method routine and it allows you to process the method routines
+faster. Normally you will call a method routine for each object instance; 
+What this funciton allows you to do is call only one method
+routine for all the instances that are grouped by getproc. For scalars
+you have only one instance therefore it is more efficient with table entries.
+
+Once this finds all the varbinds in the get request that have the same 
+getproc and instances it links together all the varbinds so that     
+within the same method routine they can be processed using a linked list.
+
+Example : In ipRouteTable you have ipRouteNextHop and ipRouteType.
+          If you are doing a get request such as ...
+GET ipRouteNextHop.200.20.20.20  sysName.0 ipRouteType.200.20.20.20 
+
+then you are getting values from the same routing  table entry. If
+your routing interfaces are written to refer to complete entries then
+it makes sense to do the above operation with a single call to this
+routing interface.
+Usually the method routines are invoked in sequence for each variable binding,
+so it will be faster if only one method routine is called to complete all 
+the processing of the routing varbinds in the example. The two routing table
+varbinds will be linked together because they have the same get process and
+the same instance, but sysName varbind does not get linked. 
+
+
+Also see snmpSystem.c file, it uses snmpdGroupByGetprocAndInstance
+
+SPR / PATCH:
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+18. TITLE: Missing documentation for snmpNextIndex in SNMPv1/v2c 1.0.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMPv1/v2c 1.0          SNMPv1/v2c 1.0 beta
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM: 
+
+No manpage for snmpNextIndex() function.
+
+RESEARCH: snmpNextIndex function is for internal use. This was not
+intended for user. Nevertheless the user could use this function or
+write one similar to it.
+
+RESOLUTION:
+
+/*******************************************************************************
+*  snmpNextIndex
+*
+*  Function to compute the next feasible OID for some given
+*  table index type.
+*
+*
+*  <compc>    - component count of input oid sequence
+*  <compl>    - input oid sequence
+*  <pOutOid>  - output OID sequence. This buffer must be provided by the caller,
+*               and be big enough for an oid sequence of length oidLen.
+*  <pMaxOid>  - The max possible table index of this kind.
+*               e.g. for the udpTable the index can be max ff.ff.ff.ff.ffff
+*  <oidLen>   - length of index oid sequence
+*
+* RETURNS:
+*    0    if valid next index generated in OutOid.
+*    1    if no next index value possible.
+*
+* NOMANUAL
+*/
+
+int snmpNextIndex
+    (
+    int               compc,     /* Component count */
+    const OIDC_T *    compl,     /* Oid for which lexicographic next is reqd */
+    OIDC_T *          pOutOid,   /* Output oid i.e. the next feasible oid */
+    const OIDC_T *    pMaxOid,   /* max possible value for the index oid */
+    int               oidLen     /* length of index oid */
+    )
+
+
+SPR / PATCH: 7664
+
+KEYWORDS: snmp snmpdLib.c snmpIf next
+
+--------------------------------------------------------------------------
+
+19. TITLE: Why is snmpIoCommunityValidate() not returning a response PDU 
+           to the SNMP manager ? 
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  snmpv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+According to the documentation the function snmpIoCommunityValidate()
+should return 1 if the passed-in community string is invalid.
+I did this and what's happening is the agent will not respond to
+the manager.  That is, the agent simply drops the PDU and causes
+a timeout condition to occur at the manager.
+
+My question is: what do I need to do to make the agent respond
+to the manager with the error condition AUTHORIZATION_ERROR?
+That is, instead of allowing the manager to timeout, it would
+be better to explicitly notify the manager the community string
+is set incorrectly in the PDU.
+
+
+RESOLUTION:
+
+The snmp manager must keep track of the valid community names because
+community names are defined local to the agent, and the manager should know
+which ones are valid names for each SNMP agent. 
+
+This behavior could vary from one vendor to another. In the WindNet SNMP agent 
+snmpIoCommunityValidate is distributed in source form in snmpIoLIb.c.
+You should be able to send a trap to the manager, because if a bad 
+community is received, the following is executed ...
+
+   /* Got a bad community if were here, so increment the
+     * snmpInBadCommunityNames counter
+     */
+
+    ++ snmp_stats.snmpInBadCommunityNames;
+
+    /* An auth fail trap may be sent here */
+
+    return (1);
+
+
+SPR / PATCH:
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+20. TITLE: Compiling custom and standard MIBs gives errors.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMPv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+When using the SNMP mib compiler to compile the std. and custom MIBs
+the following error is produced:
+ 
+>mibcomp -o ..\Control\SNMP\Agent\snmpMib2.c Control\SNMP\Mibs\rfc1155.smi
+>..\Control\SNMP\Mibs\snmpMib2.mib ..\Control\SNMP\Mibs\rfc1213.mib
+>..\Control\SNMP\Mibs\cmn.mib ..\Control\SNMP\Mibs\frs.mib
+>Wind River Systems  WindNet MIB compiler , version 1.0.
+>Copyright (c) 1989-1996, Wind River Systems Inc.
+>processing object RFC1213-MIB:ifTable
+>   
+>..\Control\SNMP\Mibs\rfc1213.mib:200: "ifTable" cannot have both
+>synchronous and asynchronous method routines.
+
+The custom MIBs are - cmn.mib frs.mib
+The standard ones   - rfc1213.mib  snmpMib2.mib rfc1155.smi
+
+RESOLUTION: 
+Some of the MIB definition files maybe dependent on other MIBs, and this
+means order of the MIB files to the MIB compiler is important.
+
+snmpMib2.mib -  Since this MIB definition file depends on the files - 
+                rfc1213.mib and  rfc1155.smi
+
+Mibs will compile without errors if compiled as follows :
+
+% (tor101/target/src/snmpv1) 18> mibcomp -l $WIND_BASE/target/src/snmpv1/mibs \ 
+rfc1155.smi rfc1213.mib  snmpMib2.mib cmn.mib frs.mib  
+
+
+SPR / PATCH:
+
+KEYWORDS: snmpv1 snmpv2c description make check snmp
+
+--------------------------------------------------------------------------
+
+21. TITLE: mibleaf.h file is missing in the /snmpv1/agent/ directory.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMPv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+A file necessary for the SNMP agent, "mibleaf.h", is missing from  
+the Tornado 1.0.1 distribution.  
+
+RESOLUTION:
+The mibleaf.h is generated when the Makefile in the src/snmpv1/agent 
+directory is run. The mibcomp utility creates snmpMib2.c , mibhand.h 
+and mibleaf.c files in the "agent" directory.
+
+SPR / PATCH:
+
+KEYWORDS:
+
+--------------------------------------------------------------------------
+
+22. TITLE: How to use non-ip interfaces in the MIB ifTable.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMPv1/v2c 1.0          Tornado 1.0.1
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+How to add non-IP interfaces to the MIB-2 ifTable such as T1, E1, DS0.
+WindNet SNMP provides support to MIB2 interface table using m2Lib.
+In the current implementation the interfaces appearing in the table are all
+IP interfaces (which are the VxWorks attached network interfaces).
+What needs to be done so that all the interfaces (NOT just the IP ones) 
+must appear in the IfTable, for example T1 carrying voice).
+Standard MIBs for RS-232 MIB, T1/E1 MIB, require that those interfaces be 
+included in the ifTable of MIB-II even if they do not carry IP traffic.
+
+RESOLUTION:
+There is a new snmpIf.c which has comments on how to use non
+ip interfaces in the SNMP agent. Check with Technical support for the 
+patch.
+
+snmpIf.c - snmp v1 interface group method routines
+
+modification history
+--------------------
+01b,21aug97,an   Updated comments to include non ip interfaces
+
+
+SPR / PATCH: 9060 / snmpIf.c
+
+KEYWORDS: MIB-II MIB II non ip snmpv1 snmpv2c snmp snmpv1v2c
+
+--------------------------------------------------------------------------
+
+23. TITLE: Problem using ipAddrTable in snmpIp.c. 
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMP v1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+There are two problems with the ipAddrEntryInfoGet() in snmpIp.c 
+
+1) ipAdEntBcastAddr is of type INTEGER not IpAddress.
+2) Looping for varbinds should be called using
+   vbp->vb_ml.ml_last_match not lastmatch. This error will cause multiple
+   get-next to respond with all the same values.
+
+Running into a problem when I issue an SNMP query on the
+"ipAddrTable" (MIB2 path: mib-2 / ip / ipAddrTable).
+
+When I query the SNMP agent for the contents of its ipAddrTable,
+I get the following results:
+ 
+        ipAdEntAddr:         127.0.0.1
+        ipAdEntIfIndex:      127.0.0.1
+        ipAdEntNetMask:      127.0.0.1
+        ipAdEntBcastAddr:    127.0.0.1
+        ipAdEntReasmMaxSize: 127.0.0.1
+ 
+However, when I make an individual query for each field
+of the ipAddrTable, I get the following results:
+ 
+        ipAdEntAddr:         127.0.0.1
+        ipAdEntIfIndex:      2
+        ipAdEntNetMask:      255.0.0.0
+        ipAdEntBcastAddr:    0,0,0,1
+        ipAdEntReasmMaxSize: 65535
+ 
+A "multiple" query for the ipAddrTable doesn't appear to
+be working correctly. In the ipAddrEntryInfoGet routine.  
+It seems like the lastmatch variable is not being incremented properly.  
+Also, for some unknown reason, ipAddrRouteEntryNext is called after
+the "lastmatch" variable has been incremented to "2".
+
+
+-> Received packet...
+in snmpIoCommunityValidate: 7b9f18
+pkt comm: public - 6
+comm: public - 6
+ipAddrEntryNext >>> 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ 
+Received packet...
+in snmpIoCommunityValidate: 7b9f18
+pkt comm: public - 6
+comm: public - 6
+ipAddrEntryNext >>> 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ipAddrEntryInfoGet >>> lastmatch 1
+ 
+Received packet...
+in snmpIoCommunityValidate: 7b9f18
+pkt comm: public - 6
+comm: public - 6
+ipAddrEntryNext >>> 1
+ipAddrEntryNext >>> 2
+ipAddrEntryInfoGet >>> lastmatch 2
+ipAddrEntryInfoGet >>> lastmatch 2
+ipAddrEntryInfoGet >>> lastmatch 2
+ipAddrEntryInfoGet >>> lastmatch 2
+ipRouteEntryNext >>> 1
+ipRouteEntryInfoGet >>> lastmatch 1
+ 
+ 
+I also ran a "multiple" query test on the ipRouteTable.  The
+lastmatch flag looks like it's incremented properly.  Here's
+what was printed out when I ran the test:
+
+-> Received packet...
+in snmpIoCommunityValidate: 7b9ef8
+pkt comm: public - 6
+comm: public - 6
+ipRouteEntryNext >>> 1
+ipRouteEntryInfoGet >>> lastmatch 1
+ipRouteEntryInfoGet >>> lastmatch 2
+ipRouteEntryInfoGet >>> lastmatch 3
+ipRouteEntryInfoGet >>> lastmatch 4
+ipRouteEntryInfoGet >>> lastmatch 5
+ipRouteEntryInfoGet >>> lastmatch 6
+ipRouteEntryInfoGet >>> lastmatch 7
+ipRouteEntryInfoGet >>> lastmatch 8
+ipRouteEntryInfoGet >>> lastmatch 9
+ipRouteEntryInfoGet >>> lastmatch 10
+ 
+Received packet...
+in snmpIoCommunityValidate: 7b9ef8
+pkt comm: public - 6
+comm: public - 6
+ipRouteEntryNext >>> 11
+ipRouteEntryInfoGet >>> lastmatch 11
+ipRouteEntryInfoGet >>> lastmatch 12
+ipRouteEntryInfoGet >>> lastmatch 13
+
+Received packet...
+in snmpIoCommunityValidate: 7b9ef8
+pkt comm: public - 6
+comm: public - 6
+ipRouteEntryNext >>> 1
+ipRouteEntryInfoGet >>> lastmatch 1
+ipRouteEntryInfoGet >>> lastmatch 2
+ipRouteEntryInfoGet >>> lastmatch 3
+ipRouteEntryInfoGet >>> lastmatch 4
+ipRouteEntryInfoGet >>> lastmatch 5
+ipRouteEntryInfoGet >>> lastmatch 6
+ipRouteEntryInfoGet >>> lastmatch 7
+ipRouteEntryInfoGet >>> lastmatch 8
+ipRouteEntryInfoGet >>> lastmatch 9
+ipRouteEntryInfoGet >>> lastmatch 10
+ 
+
+Received packet...
+in snmpIoCommunityValidate: 7b9ef8
+pkt comm: public - 6
+comm: public - 6
+ipRouteEntryNext >>> 11
+ipRouteEntryInfoGet >>> lastmatch 11
+ipRouteEntryInfoGet >>> lastmatch 12
+ipRouteEntryInfoGet >>> lastmatch 13
+ 
+
+Received packet...
+in snmpIoCommunityValidate: 7b9ef8
+pkt comm: public - 6
+comm: public - 6
+ipRouteEntryNext >>> 1
+ipRouteEntryNext >>> 2
+ipRouteEntryInfoGet >>> lastmatch 2
+ipRouteEntryInfoGet >>> lastmatch 3
+ipRouteEntryInfoGet >>> lastmatch 4
+ipRouteEntryInfoGet >>> lastmatch 5
+ipRouteEntryInfoGet >>> lastmatch 6
+ipRouteEntryInfoGet >>> lastmatch 7
+ipRouteEntryInfoGet >>> lastmatch 8
+ipRouteEntryInfoGet >>> lastmatch 9
+ipRouteEntryInfoGet >>> lastmatch 10
+ipRouteEntryInfoGet >>> lastmatch 11
+ 
+Received packet...
+in snmpIoCommunityValidate: 7b9ef8
+pkt comm: public\050 - 6
+ 
+comm: public - 6
+ipRouteEntryNext >>> 11
+ipRouteEntryNext >>> 12
+ipRouteEntryInfoGet >>> lastmatch 12
+ipRouteEntryInfoGet >>> lastmatch 13
+ 
+->
+
+
+RESOLUTION:
+
+1) ipAdEntBcastAddr is INTEGER type not IpAddress type.
+
+   From MIB-II RFC -
+
+        IpAddrEntry ::=
+        SEQUENCE {
+        ipAdEntAddr
+        IpAddress,
+        ipAdEntIfIndex
+        INTEGER,
+        ipAdEntNetMask
+        IpAddress,
+          ipAdEntBcastAddr INTEGER,
+        ipAdEntReasmMaxSizecase LEAF_ipAdEntBcastAddr:
+        getproc_got_ip_address (pktp, vbp,
+        htonl (pIpAddrEntry->ipAdEntBcastAddr));
+
+        INTEGER (0..65535)
+        }
+
+        In snmpIp.c - the method implemnetation for
+        ipAddrEntryInfoGet() is incorrect -
+
+        case LEAF_ipAdEntBcastAddr:
+        getproc_got_ip_address (pktp, vbp,
+        htonl (pIpAddrEntry->ipAdEntBcastAddr));
+
+        It should be integer, but NOT ip_address.
+
+    In file snmpIp.c change the lines to be as follows
+
+        case LEAF_ipAdEntBcastAddr:
+        getproc_got_int32 (pktp, vbp,
+        pIpAddrEntry->ipAdEntBcastAddr);
+
+2) Looping for var binds should be called using
+   vbp->vb_ml.ml_last_match not lastmatch.
+
+   The code in snmpIp.c is incorrect in the subroutine ipAddrEntryNext().
+   it reads:
+             ipAddrEntryInfoGet (lastmatch, pktp, vbp, &ipAddrEntry);
+    it should be:
+             ipAddrEntryInfoGet (vbp->vb_ml.ml_last_match, pktp, vbp,
+                                    &ipAddrEntry);
+
+    Similarly code in ipAddrEntryGet() is incorrect -    
+          ipAddrEntryInfoGet (lastmatch, pktp, vbp, &ipAddrEntry)
+    correction :
+          change "lastmatch" to vbp->vb_ml.ml_last_match .
+
+     
+SPR / PATCH: 9033
+
+KEYWORDS: query getnext var bind   
+
+--------------------------------------------------------------------------
+
+24. TITLE: SNMP MIB compiler fails on UInteger32 in rfc1447 mib 
+           definition.
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMPv1/v2c 1.0
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+Problem using the mibcompiler for a ASN.1 type (UInteger32) which is defined 
+in RFC1442 but has not been included in the mibcompiler.
+
+% mibcomp -check rfc1447.mib
+Wind River Systems  WindNet MIB compiler , version 1.0.
+Copyright (c) 1989-1996, Wind River Systems Inc.
+rfc1447.mib:6: SNMPv2-SMI doesn't define UInteger32
+
+RFC 1442 defines SMI for SNMPv2 and it contains the definition for 
+UInteger32:
+
+          -- an unsigned 32-bit quantity
+          UInteger32 ::=
+              [APPLICATION 7]
+                  IMPLICIT INTEGER (0..4294967295)
+                  
+RESOLUTION: 
+
+RFC1442 is obsolete, and it has been replaced by RFC1902. The
+UInteger32 has been removed and Unsigned32 type has been added. This is
+reflected in the SNMP MIB compiler that is based on Emissary 6.0
+Checking the SNMP header files in the /target/h/snmp/ dir will show that
+UInteger32 has been removed. Use Unsigned32 instead of UInteger32.
+              
+SPR / PATCH:
+
+KEYWORDS: mib compiler RFC 1573 1442 interfaces ASN1
+
+--------------------------------------------------------------------------
+
+25. TITLE: SNMP MIB compiler complains about BITS in the MIB definition. 
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMPv1/v2c 1.0 
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+The following MIB definition fails with the SNMPv1/v2c mib compiler with
+the error : expected a string got BITS
+
+Unsigned32 and BITS are both in rfc1902, which replaces rfc1442 ...,
+and rfc1902 is supported by the smpv1/v2c 1.0 mib compiler.
+The mibcompiler does not complain about Unsigned32.
+
+SOME-IF-MIB DEFINITIONS ::= BEGIN
+ 
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Unsigned32, BITS  
+FROM SNMPv2-SMI 
+     enterprises
+FROM RFC1155-SMI
+     DisplayString
+FROM RFC1213-MIB ;
+
+
+...
+
+        sysProcessorNo OBJECT-TYPE
+              SYNTAX  BITS {master(0), slave1(1)}
+              MAX-ACCESS  read-write
+              STATUS  current
+              DESCRIPTION " processor number"
+ 
+...
+
+END 
+
+
+RESOLUTION:
+
+The MIB defition compiles the BITS construct without error if the BITS 
+is removed from the IMPORTS statement.
+
+SPR / PATCH: 9565
+
+KEYWORDS: bits mibcomp snmpv1 snmpv2 snmpv2c snmp
+
+--------------------------------------------------------------------------
+
+26. TITLE: m2Init does not initialze the maxRouteTableSize value correctly. 
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMP v1/v2c 1.0         Tornado 1.0.1 
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+One of the functions in the m2lib - m2IpRouteTblentryGet()
+corrupts the memory.  The following m2Init() call was used :
+m2Init(0,0,0,0,0,0,10);
+Although the routeTable size is set to 10, after this call the 
+routeTable grows beyond 10. Repeated SNMP-get calls, and a few seconds 
+to a few minutes later task dies with a bus error.
+
+RESOLUTION:
+
+When initializing the routing table structure using m2IpInit, you
+have to first release the resources with m2IpDelete. 
+Once you release the resources call m2IpInit with a value of "10" 
+for the routetable size, it should work the way you expect it to.
+If you call m2IpInit without calling m2IpDelete, it
+does not initialize the m2RouteTableSize to 10, and the default 
+value of 40 is still being used.  
+
+Shown below are two outputs from snmp walk for ipRouteDest. The first 
+one was done without calling m2Delete() so the value of 
+maxRouteTableSize in m2Init() which was set to 1 did not take 
+affect. In the second case m2Delete() was called before m2Init() 
+and hence only one route has been retrieved by the SNMP manager 
+which is the expected result.
+
+> snmpwalk ipRouteDest
+
+ipRouteDest.127.0.0.1           IP Address: 127.0.0.1
+ipRouteDest.147.11.41.0         IP Address: 147.11.41.0
+ipRouteDest.147.11.41.10        IP Address: 147.11.41.10
+ipRouteDest.147.11.41.11        IP Address: 147.11.41.11
+ipRouteDest.147.11.41.12        IP Address: 147.11.41.12
+ipRouteDest.147.11.41.13        IP Address: 147.11.41.13
+ipRouteDest.147.11.41.14        IP Address: 147.11.41.14
+ipRouteDest.147.11.41.15        IP Address: 147.11.41.15
+ipRouteDest.147.11.41.16        IP Address: 147.11.41.16
+ipRouteDest.147.11.41.17        IP Address: 147.11.41.17
+ipRouteDest.147.11.41.18        IP Address: 147.11.41.18
+ipRouteDest.147.11.41.19        IP Address: 147.11.41.19
+No more in subtree
+
+> snmpwalk ipRouteDest
+ipRouteDest.127.0.0.1           IP Address: 127.0.0.1
+No more in subtree
+
+SPR / PATCH:
+
+KEYWORDS: m2Lib MIB m2IpInit m2IpLib m2IpGroupInfoGet Ip routing table 
+
+--------------------------------------------------------------------------
+
+27. TITLE: How to set the priority of the tSnmpd task at vxWorks boot time. 
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMP v1/v2c 1.0         Tornado 1.0.1  
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM: 
+
+How do I change the default priority of the 
+WindNet SNMP agent task "tSnmpd" during the network initialization so
+that when vxWorks boots up the tSnmpd task is set to the new priority. 
+
+RESOLUTION:
+
+The network subsystem initialization is done from usrNetwork.c
+
+usrSnmpdInit() initializes the SNMP agent and the MIB-2 libraries.
+snmpdInit(snmpMibModules, traceLevel,0, 0) routine is called from
+usrSnmpdInit() to initialize the SNMP agent:
+
+STATUS snmpdInit
+    (
+    MIB_MODULE *           pModules,          /* MIB modules */
+    int                    traceLevel,        /* trace level */
+    int                    prio,              /* agent task priority */
+    int                    stackSize          /* agent task stack size */
+    )
+
+The third parameter <prio> is set to 0 which has the default value - 150.
+This default task priority can be modified in usrNetwork.c to 
+another value.  After modifying usrNetwork.c, rebuild vxWorks.  
+
+Parameter <stackSize> specifies the stack size of the task and  
+is set to 0 which has the default value of 0x7000.
+
+SPR / PATCH:
+
+KEYWORDS: startup initialize SNMP SNMPv1 SNMPv2c 
+
+--------------------------------------------------------------------------
+
+28. TITLE: How are the driver counters used for MIB2 interfaces ? 
+ 
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMP v1/v2c 1.0         Tornado 1.0.1
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+Why ifInOctets and ifOutOctets is 4294967295 and does not change. 
+% get ifOutOctets.1
+ifOutOctets.1           Counter: 4294967295
+
+%  get ifInOctets.1 
+ifInOctets.1            Counter: 4294967295
+
+
+RESOLUTION:   
+
+m2IfTblEntryGet() maps the MIB-II interface index to the system's 
+internal interface index.
+The driver IOCTL structure is initialized, and the interface table 
+is read if there is a change is configuration.
+The MIB-II interface entry variables below can only be tracked by the
+hardware driver.  Drivers that support these variables respond to the
+IOCTL successfuly. If these variables are not supported by the driver
+default values are used:
+
+/* defaults */
+
+        pIfReqEntry->ifInOctets        = -1;
+        pIfReqEntry->ifInNUcastPkts    =  0;
+        pIfReqEntry->ifInDiscards      =  0;
+        pIfReqEntry->ifInUnknownProtos =  0;
+        pIfReqEntry->ifOutOctets       = -1;
+        pIfReqEntry->ifOutNUcastPkts   =  0;
+        pIfReqEntry->ifOutDiscards     =  0;
+
+
+
+SPR / PATCH: 3452, SNMP v1/v2c Release Notes
+
+KEYWORDS: M2_NETDRVARS MIB-II interface group network driver
+
+--------------------------------------------------------------------------
+
+29. TITLE: Why the SET request from a SNMP manager does not get a 
+           response from the SNMP agent ?
+
+
+                         SCOPE                   DISCOVERED ON
+              HOST:  All
+                     -------------------     -------------------
+      ARCHITECTURE:  All
+                     -------------------     -------------------
+               BSP:  All
+                     -------------------     -------------------
+PRODUCT / REVISION:  SNMP v1/v2c 1.0         Tornado 1.0.1 
+                     -------------------     -------------------
+
+DESCRIPTION OF PROBLEM:
+
+The SET request SNMP message is sent from the manager but it is not  
+not by the SNMP agent.  
+
+RESOLUTION:
+
+The community string in the SNMP manager for SET request should
+be "private". And the community string for GET request should be
+"public". 
+
+SPR / PATCH:
+
+KEYWORDS: MIB PDU GET SET response  
+
+--------------------------------------------------------------------------
+

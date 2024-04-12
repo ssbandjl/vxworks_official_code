@@ -1,0 +1,110 @@
+-- This example is from the SNMPv1/v2c Component Release Supplement 1.0
+-- for Tornado 1.0.1
+-- Section 6.3 Compile-time MIB Extensions
+-- Example 6-1 MIB Definition for the Systems Group
+ 
+-- This example illustrates a MIB definition for the systems group, which
+-- allows access to the username, password, etc. on a VxWorks
+-- system. This document is in ASN.1 format. Filename: demo.mib
+--
+-- modification history
+-- 01a,14apr97,rv fixed spr 8373
+
+
+
+		VXDEMO-MIB 
+	--FORCE-INCLUDE <mib.h>
+	--FORCE-INCLUDE <snmpdefs.h>
+	--FORCE-INCLUDE "mibhand.h"
+
+		DEFINITIONS ::= BEGIN
+
+	-- Title:			VxWorks Demo MIB version 1.0
+
+	IMPORTS
+		MODULE-IDENTITY, 
+		OBJECT-TYPE
+		FROM SNMPv2-SMI
+			enterprises 
+				FROM RFC1155-SMI
+			DisplayString
+				FROM RFC1213-MIB
+				;
+
+	wrs		OBJECT IDENTIFIER ::= 	{ enterprises 731 }
+	demos		OBJECT IDENTIFIER ::= 	{ wrs 1 }
+
+	-- Module Identification Definition.
+
+	windDemo MODULE-IDENTITY
+		LAST-UPDATED "9312030000Z"
+		ORGANIZATION "Wind River Systems"
+		CONTACT-INFO
+			"        Technical Support
+
+					Postal: Wind River Systems
+					1010 Atlantic Avenue
+					Alameda, CA  94501
+					US
+
+					Tel: +1 800 545 WIND
+					Fax: +1 510 814 2104
+
+					E-mail: support@wrs.com"
+		DESCRIPTION
+				"This is the VxWorks demo MIB module.  It is provided as 
+				an example of how to make extensions to the VxWorks SNMPv1/v2c
+				Agent MIB."
+
+	::= { demos 1 }
+
+	windObjects OBJECT IDENTIFIER ::= { windDemo 1 }
+
+	-- Groups in the VxWorks Demo MIB
+
+	sysconfig OBJECT IDENTIFIER ::= { windObjects 1 }
+
+	-- System Configuration Group
+
+	-- This group provides VxWorks system configuration information.  
+	-- It is used to get/set the target's user name, and
+	-- password.  These objects are used by VxWorks when accessing 
+	-- a host over the network.  In addition, the system can be 
+	-- rebooted by changing the value of the sysState variable.
+
+	sysState OBJECT-TYPE
+		SYNTAX  INTEGER {
+			system-running(1), -- System is up and running.
+			system-reboot(2) -- System is to be rebooted.
+				}
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION
+			"The VxWorks target status is reported through this
+			field.  The only valid state that this field can be
+			set to is system-reboot.  The system will be rebooted
+			five seconds after changing the state."
+
+		::= { sysconfig 1 }
+
+	sysUserName OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION
+			"The user name the VxWorks target uses for remote
+			machine access."
+
+		::= { sysconfig 2 }
+
+	sysUserPassw OBJECT-TYPE
+		SYNTAX DisplayString (SIZE (0..255))
+		MAX-ACCESS read-write
+		STATUS current
+		DESCRIPTION
+			"The user password the VxWorks target uses for remote
+			machine access."
+
+		::= { sysconfig 3 }
+
+END 

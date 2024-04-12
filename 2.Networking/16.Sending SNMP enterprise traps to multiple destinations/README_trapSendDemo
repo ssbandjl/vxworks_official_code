@@ -1,0 +1,197 @@
+
+FILE LIST - 
+              trapSendDemo.c
+
+DESCRIPTION - 
+              This demo sends a enterprise SNMPv1 trap from the SNMPv1/v2c
+              agent running on the VxWorks target to multiple destination 
+	      hosts. It allows the user to send the trap to two destination
+              hosts in addition to the host from which the target was booted.   
+
+              The destination host may or may not be a SNMP 
+              manager, and it will receive the trap on port 162. You can use
+              "snoop" on Solaris or "etherfind" on SunOS to monitor the  
+              hosts for the traps received on it. A "trap-receive" 
+              SNMP manager utility on the host can also be used to 
+              see the traps.  
+
+              The log in this Readme file also shows the generic traps
+              (Cold Start and Link Up) that are seen on the boot-host 
+              "red" when VxWorks target was configured and
+              booted with tSnmpd (SNMP agent task). 
+
+RUNNING DEMO - 
+              See DESCRIPTION and CAVEAT in the source code.
+
+              You need to change the value of the following defines 
+              in the demo code for your setup: 
+
+              #define SNDR_IPADDR
+              #define HOST0
+              #define HOST1
+                 
+              If you need to change the number of destination hosts receving
+              the traps modify the following :      
+
+              Number of destinations - #define NUM_DES
+              Add/Delete the related - #define HOST   
+              Change in the function - trapDestGet(), the related if ... else. 
+                   
+              Place the trapSendDemo.c file in your
+              <Tornado>/src/snmpv1/agent/ dir. Depending on the target 
+              you have, define the CPU in your compile line and use
+              the Makefile in the agent dir. to compile.
+
+              Run the function trapExSend() on the vxworks target. 
+
+
+TESTED ON -   Host/Target : Solaris 2.5 / mv162
+              VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+              make CPU=MC68040 trapSendDemo.o
+
+%  make CPU=MC68040 trapSendDemo.o
+cc68k -B/folk/rajesh/tor101/host/sun4-solaris2/lib/gcc-lib/ -m68040 -ansi 
+-nostdinc -O -fstrength-reduce -fno-builtin -Wall  
+-I/folk/rajesh/tor101/target/h  -I/folk/rajesh/tor101/target/h/snmp/  -I. 
+-DCPU=MC68040  -DVXWORKS   -c trapSendDemo.c
+% 
+
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target: 
+==================
+
+-> sp trapExSend
+task spawned: id = 0x3affc0, name = t1
+
+On Solaris boot host - "red": 
+=============================
+The following two UDP packets recevied on the Solaris host's port 162 
+shows that two traps were received from the vxWorks target. 
+One SNMP trap was sent to the boothost "red", which is specified in the 
+VxWorks boot parameters. And another trap was sent to the host 
+IPaddress "147.11.41.9" which is "red". A third trap was sent to host 
+"ganges" but it's udp packet dump is not shown here.
+
+
+red% snoop -d le -P -V udp from 147.11.41.159 to 147.11.41.9 port 162
+
+Using device /dev/le (non promiscuous)
+________________________________
+     t41-159 -> red          ETHER Type=0800 (IP), size = 133 bytes
+     t41-159 -> red          IP  D=147.11.41.9 S=147.11.41.159 LEN=119, ID=225
+     t41-159 -> red          UDP D=162 S=161 LEN=99
+________________________________
+     t41-159 -> red          ETHER Type=0800 (IP), size = 133 bytes
+     t41-159 -> red          IP  D=147.11.41.9 S=147.11.41.159 LEN=119, ID=226
+     t41-159 -> red          UDP D=162 S=161 LEN=99
+
+
+Generic traps from the SNMP agent on vxWorks target 
+===================================================
+
+The following packet dumps show the COLD_START and LINK_UP traps sent
+from the SNMP agent when the VxWorks target booted up with tSnmpd.
+These standard traps can be sent by invoking snmpIoTrapSend(). The
+default agent IpAddress that is transmitted in the standard traps is 
+set to 0 in the snmpIoLib.c file. snmpIoTrapSend() can be modified by the user
+to send the traps to a different IP address. 
+
+The current release of the SNMP agent does not have a user configuration 
+file to configure a list of host IP addresses to which the SNMP 
+agent will send the traps. 
+But the user can build a utility function in the snmpIoLib file that  
+can contain a table of IP addresses from which addresses can be 
+handed off to the trap send routine. snmpIoTrapSend() can be modified
+to send the trap to different destinations. 
+
+snmpdefs.h file defines the values for the SNMP trap types:
+
+/* Values for generic_trap      */
+#define COLD_START              0
+#define WARM_START              1
+#define LINK_DOWN               2
+#define LINK_UP                 3
+#define AUTH_FAILURE            4
+#define EGP_NEIGHBOR_LOSS       5
+#define ENTERPRISE_SPECIFIC     6
+
+
+The traps received on the boot-host can be monitored as follows :
+
+A SNMP manager trap utility running as root on the Solaris boot-host "red". 
+Or using the "snoop" utility on Solaris that checks for UDP packets 
+on port 162 of the boot-host.  
+
+A NOTE on agent OID used in the trap 
+==================================== 
+
+In the src/snmpv1/agent/snmpIoLib.c file :
+
+A default OID has been defined, and the SNMP manager receives
+the trap with this default OID from the agent - 
+Enterprise: iso.2.3.4.5.6 
+
+The user can modify the snmpIoLib.c file so that the appropriate 
+OID can be sent in the trap by the agent:
+
+OIDC_T   snmpTrapMyOid [] =  {1,2,3,4,5,6};  /* agent oid used in trap
+                                                example , must be specified
+                                                by user */
+ 
+
+red% traprcv -d
+
+Packet Dump:
+30 2d  02 01   00 04  0e 74    72 61  70 20   63 6f  6d 6d    
+75 6e  69 74   79 a4  18 06    05 2a  03 04   05 06  40 04    
+00 00  00 00   02 01  00 02    01 00  43 01   00 30  00 
+Community: trap community
+Enterprise: iso.2.3.4.5.6
+Agent-addr: 0.0.0.0
+Cold start trap.
+Time Ticks: 0
+
+
+Packet Dump:
+30 2d  02 01   00 04  0e 74    72 61  70 20   63 6f  6d 6d    
+75 6e  69 74   79 a4  18 06    05 2a  03 04   05 06  40 04    
+00 00  00 00   02 01  03 02    01 00  43 01   00 30  00 
+Community: trap community
+Enterprise: iso.2.3.4.5.6
+Agent-addr: 0.0.0.0
+Link up trap.
+Time Ticks: 0
+
+
+Packet Dump:
+30 2d  02 01   00 04  0e 74    72 61  70 20   63 6f  6d 6d    
+75 6e  69 74   79 a4  18 06    05 2a  03 04   05 06  40 04    
+00 00  00 00   02 01  03 02    01 01  43 01   00 30  00 
+Community: trap community
+Enterprise: iso.2.3.4.5.6
+Agent-addr: 0.0.0.0
+Link up trap.
+Time Ticks: 0
+
+============================
+
+red% snoop -d le -P -V udp from 147.11.41.159 to 147.11.41.9 port 162
+
+Using device /dev/le (non promiscuous)
+________________________________
+     t41-159 -> red          ETHER Type=0800 (IP), size = 89 bytes
+     t41-159 -> red          IP  D=147.11.41.9 S=147.11.41.159 LEN=75, ID=3
+     t41-159 -> red          UDP D=162 S=161 LEN=55
+________________________________
+     t41-159 -> red          ETHER Type=0800 (IP), size = 89 bytes
+     t41-159 -> red          IP  D=147.11.41.9 S=147.11.41.159 LEN=75, ID=4
+     t41-159 -> red          UDP D=162 S=161 LEN=55
+________________________________
+     t41-159 -> red          ETHER Type=0800 (IP), size = 89 bytes
+     t41-159 -> red          IP  D=147.11.41.9 S=147.11.41.159 LEN=75, ID=5
+     t41-159 -> red          UDP D=162 S=161 LEN=55
+

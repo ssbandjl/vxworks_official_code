@@ -1,0 +1,49 @@
+FILE LIST -
+             teststdio2.c
+
+DESCRIPTION -
+	     teststdio2 - Test the stdio ANSI C library
+	     This routine tests the various types (basically 3 i.e, stdin, 
+             stdout and stderr), macros and functions for performing input 
+             and output as declared by stdio.h
+
+RUNNING DEMO - 
+	     Place the teststdio2.c in your <Tornado> dir. Depending on 
+             the target you have, define the CPU in your compile line and 
+             use the Makefile in the BSP dir. to compile.
+
+	     Run teststdio2() on vxworks target.
+
+	     Need to add INCLUDE_DOSFS & INCLUDE_RAMDRV in configAll.h
+	     for successful running the code.
+
+	     To run this demo invoke the function teststdio2().
+
+TESTED ON -  Host/Target : Solaris 2.5.1 /mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+             make CPU=PPC604 teststdio2.o
+
+% make teststdio2.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c teststdio2.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+-> ld <teststdio2.o
+value = 735416 = 0xb38b8 = authunix_create + 0x50
+-> teststdio2()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+SUCCESS testing stdio part 2
+

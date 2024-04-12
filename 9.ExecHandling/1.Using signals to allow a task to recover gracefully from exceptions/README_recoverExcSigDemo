@@ -1,0 +1,191 @@
+FILE LIST -
+	    recoverExcSigDemo.c
+
+
+DESCRIPTION -
+	    tServer task executes functions at low priority (254). serverSend
+	    funtion is used to send a request to the tServer to execute a
+	    function at the tServer's  priority.
+
+	    First tServer task executes the i() system call to print the summary
+	    of tShell task. Next an address exception is caused in tServer
+	    task by trying to execute a funtion at non-aligned word boundry.
+	    As a result SIGBUS signal is  raised  automatically. Signals
+	    (setjmp() and longjmp()) are used to allow the tServer task to
+	    recover gracefully from an address error exception. For more
+	    information about signals, please refer to sigLib manual pages.
+
+RUNNING DEMO -
+	    Place the recoverExcSigDemo.c file in your <Tornado> dir. Depending
+	    on the target you have, define the CPU in your compile line and
+	    use the Make in the BSP dir. to compile.
+
+	    Include #define INCLUDE_SHELL in the config.h file
+
+	    To run this code invoke the function recoverExcDemo()
+
+CAVEAT    - This code fails on a mv1604 board.
+
+TESTED ON - Host/Target : Solaris 2.5.1 / mv177
+	    VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	    make CPU=68k recoverExcSigDemo.o
+
+%make CPU=68k recoverExcSigDemo.o
+
+cc68k -B/petaluma1/mayur/tor101/host/sun4-solaris2/lib/gcc-lib/ -m68040 -ansi 
+-nostdinc -O2 -fvolatile -fno-builtin -Wall -I/h   -I. 
+-I/petaluma1/mayur/tor101/target/config/all 
+-I/petaluma1/mayur/tor101/target/h -I/petaluma1/mayur/tor101/target/src/config 
+-I/petaluma1/mayur/tor101/target/src/drv -DCPU=MC68060     
+-c recoverExcSigDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <recoverExcSigDemo.o
+value = 688064 = 0xa7fc0
+-> sp (recoverExcDemo)
+task spawned: id = 1f90b3c, name = u0
+value = 33098556 = 0x1f90b3c
+
+Exception number 3: Task: 0x1fff3d0 (tServer)
+
+Address Error
+Status Register     : 0x27
+2efe2    _vxTaskEntry   +10 : _sigHandler (0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+27a4c6   _sigHandler    +208: _read (11, 1fff38c, 8)
+1d450    _read          +10 : _iosRead ([11, 1fff38c, 8, 1fff3a0, 27a4cc, 11])
+2460a    _iosRead       +72 : _pipeDevCreate ([1fffe98, 1fff38c, 8, 1fff370, 1d4
+56, 11])
+2cd22    _pipeDevCreate +ee : _msgQReceive ([1fffea6, 1fff38c, 8, ffffffff, 0, &
+_taskIdSelf])
+78d2     _msgQReceive   +b6 : _qJobGet ([1fffeaa, ffffffff, 0, 0, 0, 1fffe98])
+
+The Output on Console:
+======================
+Starting the tServer task
+
+Running tServer task without causing an exception
+
+Task not found.
+
+
+Causing an address error exception in tServer task
+
+
+Signal SIGBUS (bus error) received from tServer task (0x1fff3d0)
+
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv2603
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+	     make CPU=PPC603 recoverExcSigDemo.o
+
+%make CPU=PPC603 recoverExcSigDemo.o
+ccppc -B/petaluma1/mayur/tor101/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope  
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101/target/config/all 
+-I/petaluma1/mayur/tor101/target/h -I/petaluma1/mayur/tor101/target/src/config 
+-I/petaluma1/mayur/tor101/target/src/drv -DCPU=PPC603  
+-DMV2600 -DTARGET_DIR="\"mv2603\""   -c recoverExcSigDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <recoverExcSigDemo.o
+value = 664232 = 0xa22a8
+-> sp (recoverExcDemo)
+task spawned: id = be7d28, name = u1
+value = 12483880 = 0xbe7d28
+
+Exception number 1792: Task: 0xffefa0 (tServer) 
+
+
+"Floating point invalid operation for INF * 0"
+"Floating point invalid operation for invalid compare"
+program counter:  0xffef20
+machine status:   0xffef00
+FP status & ctrl: 0x1a0000
+16c140   vxTaskEntry    +60 : 28fae8 ([])
+28fba0   sigHandler     +238: read ([])
+13867c   read           +10 : iosRead ([])
+139b18   iosRead        +d0 : 13c5c0 ([])
+13c5e4   pipeDevCreate  +15c: msgQReceive ([])
+15c958   msgQReceive    +128: qJobGet ([])
+
+The Output on Console:
+======================
+Starting the tServer task
+
+Running tServer task without causing an exception
+
+Show routine of this object not configured into system.
+
+
+Causing an address error exception in tServer task
+
+
+Signal 4 received from tServer task (0xffefa0)
+
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1603
+             VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	     make CPU=PPC603 recoverExcSigDemo.o
+
+%make CPU=PPC603 recoverExcSigDemo.o
+ccppc -B/petaluma1/mayur/tor101/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope  
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101/target/config/all 
+-I/petaluma1/mayur/tor101/target/h -I/petaluma1/mayur/tor101/target/src/config 
+-I/petaluma1/mayur/tor101/target/src/drv -DCPU=PPC603  
+-DMV1600 -DTARGET_DIR="\"mv1603\""   -c recoverExcSigDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+-> ld <recoverExcSigDemo.o
+value = 664800 = 0xa24e0 = hashTblFind + 0xd0
+-> sp (recoverExcDemo)
+task spawned: id = 5cc8d8, name = u1
+value = 6080728 = 0x5cc8d8
+-> 
+Exception number 1792: Task: 0x7fefa0 (tServer) 
+
+
+"Floating point invalid operation for software request"
+"Floating point invalid operation for square root"
+"Floating point invalid operation for interger convert"
+program counter:  0x7fef20
+machine status:   0x7fef00
+FP status & ctrl: 0x78788
+825ac    vxTaskEntry    +60 : 130880 ([])
+130938   sigHandler     +238: read ([])
+5da14    read           +10 : iosRead ([])
+5eeb0    iosRead        +d0 : 61958 ([])
+6197c    pipeDevCreate  +15c: msgQReceive ([])
+7789c    msgQReceive    +128: qJobGet ([])
+
+The Output on Console:
+======================
+Starting the tServer task
+
+Running tServer task without causing an exception
+
+Show routine of this object not configured into system.
+
+
+Causing an address error exception in tServer task
+
+
+Signal 4 received from tServer task (0x7fefa0)
+

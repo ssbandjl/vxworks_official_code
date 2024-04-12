@@ -1,0 +1,49 @@
+FILE LIST -
+             testMath3.c
+
+DESCRIPTION -
+	     double sinh(double x);
+	     double cosh(double x);
+	     double tanh(double x);
+	     These functions compute the designated direct
+	     hyperbolic functions for real arguments.
+
+RUNNING DEMO -
+	     Place the testMath3.c file in your <Tornado> dir.
+	     Depending on the target you have, define the CPU in your compile
+	     line and use the Make in the BSP dir. to compile.
+
+	     For MC68LC040 you need to add INCLUDE_SW_FP in config.h and need
+	     to use VX_FP_TASK as the options parameter for taskSpawn() in
+	     in usrConfig.c for successful running the demo.
+
+	     To run this code invoke the function testmath3().
+
+TESTED ON -  Host/Target : Solaris 2.5.1 /mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+	     make CPU=PPC604 testMath3.o
+
+%make testMath3.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c testMath3.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <testMath3.o
+value = 839168 = 0xcce00
+-> testmath3()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+SUCCESS testing math, part 3

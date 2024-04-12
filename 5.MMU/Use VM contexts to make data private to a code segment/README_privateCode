@@ -1,0 +1,91 @@
+FILE LIST -
+             privateCode.c
+
+DESCRIPTION -
+             initData - allocate memory and make it non-writable
+	     This routine initializes the data and should be called only once.
+
+	     dataModify - modify data
+	     To modify the data, tasks must call this routine, 
+             passing a pointer to the new data. 
+             This routine makes the memory writable, modifies
+	     the data, and sets the memory back to nonwritable. 
+		 
+	     If a task tries to read the memory, it is successful; however,
+	     if it tries to modify the data outside of dataModify(), a bus
+	     error occurs.
+
+	     To test from the shell use:
+	     -> initData
+	     -> sp dataModify
+	     -> d pData
+	     -> bfill (pData, 1024, 'X')
+
+RUNNING DEMO -
+	     Place the privateCode.c in your <Tornado> dir. Depending
+	     on the target you have, define the CPU in your compile
+	     line and use the Makefile in the BSP dir. to compile.
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv177
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	      make privateCode.o
+
+%make privateCode.o
+cc68k -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-m68040 -ansi -nostdinc -O2 -fvolatile -fno-builtin -Wall -I/h   -I. 
+-I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=MC68060     -c privateCode.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <privateCode.o
+value = 675736 = 0xa4f98
+
+-> sp dataModify
+task spawned: id = f9fe5c, name = u1
+value = 16383580 = 0xf9fe5c
+-> d pData
+00fa0000:  0000 0000 0000 0000 0003 ae54 0003 ae54   *...........T...T*
+00fa0010:  0003 ae54 0003 ae54 0003 ae54 0003 ae54   *...T...T...T...T*
+00fa0020:  0003 ae54 0004 1280 0003 ae54 0005 11b8   *...T.......T....*
+00fa0030:  0003 ae54 0003 ae54 0003 ae54 0003 aea2   *...T...T...T....*
+00fa0040:  0003 aea2 0003 aea2 0003 aea2 0003 aea2   *................*
+00fa0050:  0003 aea2 0003 aea2 0003 aea2 0003 aea2   *................*
+00fa0060:  0003 aea2 0003 aea2 0003 aea2 0003 aea2   *................*
+00fa0070:  0003 aea2 0003 aea2 0003 aea2 0003 aea2   *................*
+00fa0080:  0003 ae54 0003 ae54 0004 1244 0003 ae54   *...T...T...D...T*
+00fa0090:  0003 ae54 0003 ae54 0003 ae54 0003 ae54   *...T...T...T...T*
+00fa00a0:  0003 ae54 0003 ae54 0003 ae54 0003 ae54   *...T...T...T...T*
+00fa00b0:  0003 ae54 0003 ae54 0003 ae54 0003 ae54   *...T...T...T...T*
+00fa00c0:  0003 ae54 0003 ae54 0003 ae54 0005 11a0   *...T...T...T....*
+00fa00d0:  0003 ae54 0005 1198 0003 ae54 0005 11c0   *...T.......T....*
+00fa00e0:  0003 ae54 0003 ae54 0003 ae54 0003 ae54   *...T...T...T...T*
+00fa00f0:  0005 11c8 0004 fb50 0003 ae54 0003 ae54   *.......P...T...T*
+value = 0 = 0x0
+-> bfill (pData, 1024, 'X')
+
+Exception number 2: Task: 0xf92cb8 (t9) 
+
+Access Fault/Bus Error
+Status Register     : 0x3000
+Program Counter     : 0x3ea0
+Effective Address   : 0xf98000
+2b2b6    _vxTaskEntry   +10 : _wdbFuncCallLibInit (fffcec, 400, 58, 0, 0, 0, 0, 0, 0, 0)
+226a8    _wdbFuncCallLibInit+dc : _bfill ([f98000, 400, 58, 0, 0, 0])
+value = 0 = 0x0
+
+The Output on Console:
+======================
+Access Fault
+Program Counter: 0x00003ea0
+Status Register: 0x3000
+Access Address : 0x00f98000
+Fault Status   : 0x00850080
+Task: 0xf92cb8 "t9"

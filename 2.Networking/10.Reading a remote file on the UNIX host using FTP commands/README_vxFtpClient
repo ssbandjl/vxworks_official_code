@@ -1,0 +1,60 @@
+FILE LIST -
+              vxFtpClient.c
+              ftpData.txt
+
+DESCRIPTION - 
+	      This is a demo on using FTP communication between an
+              FTP client running on a VxWorks target and a remote 
+              FTP server running on a UNIX host.
+
+RUNNING DEMO -
+	      You will need to change the value of the following defines
+	      in the demo code for your setup:
+
+	      #define UNIX_HOST
+	      #define USER
+	      #define PASSWD
+	      #define W_DIR
+
+	      #define RD_CMND
+	      #define QUIT_CMND
+	      #define FILE
+
+	      Place the vxFtpClient.c file in your
+	      <Tornado> dir. Depending on the target
+	      you have, define the CPU in your compile line and use
+	      the Makefile in the BSP dir. to compile.
+
+	      To run the code invoke the function ftpReadDemo().
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+              make CPU=PPC604 vxFtpClient.o
+
+%  make CPU=PPC604 vxFtpClient.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c vxFtpClient.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <vxFtpClient.o
+value = 676856 = 0xa53f8 = readyQBMap + 0x2f4
+-> sp ftpReadDemo
+task spawned: id = 5d1ca0, name = u2
+value = 6102176 = 0x5d1ca0
+
+Output on the console window:
+=============================
+
+Data read: Hello World!!!
+

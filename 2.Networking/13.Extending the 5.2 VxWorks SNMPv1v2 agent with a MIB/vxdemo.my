@@ -1,0 +1,583 @@
+          VXDEMO-MIB DEFINITIONS ::= BEGIN
+
+	  -- Title:       VxWorks Demo MIB version 1.0
+	  -- Date:        7 October 1993
+
+	  IMPORTS
+              MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE
+                  FROM SNMPv2-SMI;
+		    
+
+          wrs       OBJECT IDENTIFIER ::=   { enterprises 731 }
+          demos     OBJECT IDENTIFIER ::=   { wrs 1 }
+
+	  -- Module Identification Definition.
+
+          windDemo MODULE-IDENTITY
+              LAST-UPDATED "9312030000Z"
+              ORGANIZATION "Wind River Systems"
+              CONTACT-INFO
+                      "        Technical Support
+
+                       Postal: Wind River Systems
+                               1010 Atlantic Avenue
+                               Alameda, CA  94501
+                               US
+
+                          Tel: +1 800 545 WIND
+                          Fax: +1 510 814 2104
+
+                       E-mail: support@wrs.com"
+              DESCRIPTION
+                      "This is the VxWorks demo MIB module.  It is provided as 
+		       an example of how to make extensions to the VxWorks SNMP
+		       Agent MIB."
+
+              ::= { demos 1 }
+
+  
+	  windObjects OBJECT IDENTIFIER ::= { windDemo 1 }
+          
+          -- Groups in the VxWorks Demo MIB
+
+          sysconfig OBJECT IDENTIFIER ::=   { windObjects 1 }
+
+          systasks  OBJECT IDENTIFIER ::=   { windObjects 2 }
+
+          sysmemory OBJECT IDENTIFIER ::=   { windObjects 3 }
+
+          sysnfs    OBJECT IDENTIFIER ::=   { windObjects 4 }
+
+	  systraps  OBJECT IDENTIFIER ::=   { windObjects 5 }
+
+
+          -- System Configuration Group
+
+          -- This group provides VxWorks system configuration information.  
+	  -- It is used to get/set the target's user name, and
+          -- password.  These objects are used by VxWorks when accessing 
+	  -- a host over the network.  In addition, the system can be 
+	  -- rebooted by changing the value of the sysState variable.
+
+          sysState OBJECT-TYPE
+             SYNTAX  INTEGER {
+                          system-running(1),  -- System is up and running.
+			  system-reboot(2)    -- System is to be rebooted.
+                      }
+             MAX-ACCESS read-write
+             STATUS current
+             DESCRIPTION
+                     "The VxWorks target status is reported through this
+                      field.  The only valid state that this field can be
+                      set to is system-reboot.  The system will be rebooted
+                      five seconds after changing the state."
+
+             ::= { sysconfig 1 }
+
+           sysUserName OBJECT-TYPE
+             SYNTAX DisplayString (SIZE (0..255))
+             MAX-ACCESS read-write
+             STATUS current
+             DESCRIPTION
+                     "The user name the VxWorks target uses for remote
+                      machine access."
+
+             ::= { sysconfig 2 }
+
+           sysUserPassw OBJECT-TYPE
+             SYNTAX DisplayString (SIZE (0..255))
+             MAX-ACCESS read-write
+             STATUS current
+             DESCRIPTION
+                     "The user password the VxWorks target uses for remote
+                      machine access."
+
+             ::= { sysconfig 3 }
+
+ 
+          -- System Task Group
+
+          -- This group is used to gain access to the target's task table.
+          -- A VxWorks task can be suspended, resumed, deleted and created.
+          -- Individual parameters of a task can also be changed.  When
+	  -- changes are made to individual table entries it must be taken
+	  -- into account that this information is a snapshot of the tasks
+	  -- in the system.  
+	  --
+	  -- VxWorks tasks can be created by creating a entry into the 
+	  -- taskTable.  The table entry must be created with an index
+	  -- of zero.  In addition, the following task parameters must be 
+	  -- specified: name, entry point, priority, stack size and the 
+	  -- task options.
+
+	  taskTable OBJECT-TYPE
+              SYNTAX  SEQUENCE OF TaskEntry
+              MAX-ACCESS  not-accessible
+              STATUS  current
+              DESCRIPTION
+                      "The target system task table.  Each entry in this
+                       table represents a task in the VxWorks target."
+
+              ::= { systasks 1 }
+
+          taskEntry OBJECT-TYPE
+              SYNTAX  TaskEntry
+              MAX-ACCESS  not-accessible
+              STATUS  current
+              DESCRIPTION
+                      "Each entry contains information with regards to
+		       a task in the system."
+              INDEX   { taskId }
+
+              ::= { taskTable 1 }
+
+          TaskEntry ::=
+              SEQUENCE {
+                  taskId
+                      Integer32,
+                  taskName
+                      DisplayString,
+                  taskPriority
+                      Integer32,
+                  taskStatus
+		      Integer32,
+		  taskOptions
+		      Integer32,
+		  taskMain
+                      DisplayString,
+		  taskStackPtr
+                      UInteger32,
+		  taskStackBase
+                      UInteger32,
+		  taskStackPos
+                      UInteger32,
+		  taskStackEnd
+                      UInteger32,
+		  taskStackSize
+                      UInteger32,
+		  taskStackSizeUsage
+                      UInteger32,
+		  taskStackMaxUsed
+                      UInteger32,
+		  taskStackFree
+                      UInteger32,
+		  taskErrorStatus
+		      Integer32
+              }
+
+          taskId OBJECT-TYPE
+              SYNTAX  Integer32
+              MAX-ACCESS  read-only
+              STATUS  current
+	      DESCRIPTION
+		      "This is the task ID assigned by VxWorks to a task in the 
+		       system. A taskId of zero specifies a new task."
+
+          ::= { taskEntry 1 }
+
+          taskName OBJECT-TYPE
+              SYNTAX  DisplayString
+              MAX-ACCESS  read-write
+              STATUS  current
+	      DESCRIPTION
+		      "This is the name of the VxWorks task.  This value can 
+		       only be specified (set) at task creation."
+
+          ::= { taskEntry 2 }
+
+          taskPriority OBJECT-TYPE
+              SYNTAX  INTEGER (0..255)
+              MAX-ACCESS  read-write
+              STATUS  current
+	      DESCRIPTION
+		      "The priority of the VxWorks task.  This value can be
+		       in the range from 0, the highest priority, 
+		       to 255, the lowest priority."
+
+          ::= { taskEntry 3 }
+
+          taskStatus OBJECT-TYPE
+              SYNTAX  INTEGER {
+			   task-ready(1),      -- Task is ready to run.
+			   task-suspended(2),  -- Task is suspended. 
+			   task-delay(3),      -- Task is delayed.
+			   task-deleted(4)     -- Task is to be deleted.
+		      }
+              MAX-ACCESS  read-write
+              STATUS  current
+	      DESCRIPTION
+		      "This field specifies the current task status.  It
+		       can be used to change the current task state.
+		       For example, to suspend a task, the value of 
+		       taskStatus is changed to task-suspended, 
+		       to delete a task the value is changed to 
+		       task-deleted, etc..."
+
+          ::= { taskEntry 4 }
+
+          taskOptions OBJECT-TYPE
+              SYNTAX  Integer32
+              MAX-ACCESS  read-write
+              STATUS  current
+	      DESCRIPTION
+		      "This value represents the sum of the following
+		       options:
+
+		       value      option
+                         1        VX_SUPERVISOR_MODE(read-only)
+		         2        VX_UNBREAKABLE    (break points ignored)
+		         4        VX_DEALLOC_STACK  (deallocate stack)
+		         8        VX_FP_TASK        (floating point support)
+			16        VX_STDIO          (read-only)
+		       128        VX_PRIVATE_ENV    (private env. variables)
+                       256        VX_NO_STACK_FILL  (don't fill stack) 
+
+		      All the options above can be set at task creation time.
+		      However, once the task is executing the only option
+		      that can be changed is VX_UNBREAKABLE.  The option is
+		      toggled based on the current setting."
+
+          ::= { taskEntry 5 }
+
+          taskMain OBJECT-TYPE
+              SYNTAX  DisplayString
+              MAX-ACCESS  read-write
+              STATUS  current
+	      DESCRIPTION
+		      "This is the name of the entry function for the VxWorks
+		       task.  This name can only be specified when a task
+		       is created (entry added in the table).  The symbol
+		       must exist in the VxWorks target."
+
+          ::= { taskEntry 6 }
+
+          taskStackPtr OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+	      DESCRIPTION
+		      "This is the saved stack pointer for the task."
+
+          ::= { taskEntry 7 }
+
+          taskStackBase OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+	      DESCRIPTION
+		      "This is the address of the bottom of the stack of
+		       the VxWorks task."
+
+          ::= { taskEntry 8 }
+
+          taskStackPos OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+	      DESCRIPTION
+		      "This is the effective top of the stack in the current
+                       task state."
+
+          ::= { taskEntry 9 }
+
+          taskStackEnd OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+	      DESCRIPTION
+		      "This is the address of the top of the stack of the
+		       VxWorks task."
+
+          ::= { taskEntry 10 }
+
+          taskStackSize OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-write
+              STATUS  current
+	      DESCRIPTION
+		      "This is the actual size of the stack in bytes.  The
+		       size of the stack can only be specified at task 
+		       creation (adding an entry to the table)."
+
+          ::= { taskEntry 11 }
+
+          taskStackSizeUsage OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+	      DESCRIPTION
+		      "The number of bytes currently in use by the task from
+		       the stack."
+
+          ::= { taskEntry 12 }
+
+          taskStackMaxUsed OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+	      DESCRIPTION
+		      "This is the maximum number of bytes that have been used
+		       by task from the stack"
+
+          ::= { taskEntry 13 }
+
+          taskStackFree OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+	      DESCRIPTION
+		      "This is the number of bytes that are currently free 
+		       in the task stack."
+
+          ::= { taskEntry 14 }
+
+          taskErrorStatus OBJECT-TYPE
+              SYNTAX  Integer32
+              MAX-ACCESS  read-only
+              STATUS  current
+	      DESCRIPTION
+		      "This is the most recent error status for this task."
+
+          ::= { taskEntry 15 }
+
+
+          -- Memory Group
+
+          -- This group provides memory usage information in the VxWorks
+          -- target.  All the variables in this group are read only.
+
+
+           numBytesFree OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+              DESCRIPTION
+		      "The number of bytes that are free in system memory."
+
+	    ::= { sysmemory 1 }
+
+           numBlocksFree OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+              DESCRIPTION
+		      "The number of blocks that are free in system memory."
+
+	    ::= { sysmemory 2 }
+
+           avgBlockSizeFree OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+              DESCRIPTION
+		      "The average block size that is free in system memory."
+
+	    ::= { sysmemory 3 }
+
+
+           maxBlockSizeFree OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+              DESCRIPTION
+		      "The largest block size that is free in system memory."
+
+	    ::= { sysmemory 4 }
+
+           numBytesAlloc OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+              DESCRIPTION
+		      "The number of bytes of system memory that are 
+		       currently allocated by tasks and system services."
+
+	    ::= { sysmemory 5 }
+
+           numBlocksAlloc OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+              DESCRIPTION
+		      "The number of system memory blocks that are 
+		       currently allocated in the system."
+
+	    ::= { sysmemory 6 }
+
+           avgBlockSizeAlloc OBJECT-TYPE
+              SYNTAX  UInteger32
+              MAX-ACCESS  read-only
+              STATUS  current
+              DESCRIPTION
+		      "The average memory block size allocated in the system."
+
+	    ::= { sysmemory 7 }
+
+
+          -- The Network File System Group
+
+          -- This group provides access to the NFS file systems that are
+	  -- currently mounted in the VxWorks target.  NFS file systems 
+	  -- can be mounted or unmounted.  The ability to change 
+	  -- the NFS user id and the NFS group id for the VxWorks target 
+	  -- is provided.
+	  --
+	  -- To unmount a file system only the index of the file system
+	  -- needs to be specified.  A file system can be mounted by 
+	  -- specifying an index greater than the current table size,
+	  -- the state, the host name, the host ip address, the remote file
+	  -- system name and the local file system name.  If the host does
+	  -- not reside on the same subnet, a route to the host must first
+	  -- be added. 
+
+           nfsUserId OBJECT-TYPE
+             SYNTAX Integer32
+             MAX-ACCESS read-write
+             STATUS current
+             DESCRIPTION
+                     "The user ID the VxWorks NFS client uses to access 
+		      all NFS mounted file systems."
+
+             ::= { sysnfs 1 }
+
+
+           nfsGroupId OBJECT-TYPE
+             SYNTAX Integer32
+             MAX-ACCESS read-write
+             STATUS current
+             DESCRIPTION
+                     "The group ID the VxWorks NFS client uses to access 
+		      all NFS mounted file systems."
+
+             ::= { sysnfs 2 }
+
+
+          -- The Remote Network File System Table
+
+          -- This table provides a list of NFS file systems that are
+	  -- currently mounted on the VxWorks target.  Remote file systems can
+	  -- be mounted or unmounted by doing additions and deletions
+	  -- to the nfsTable.  A table entry can be created by specifying
+	  -- an index of zero with the rest of the parameters in the table
+	  -- entry.  A table entry can be deleted by specifying the index
+	  -- alone.
+
+
+          nfsTable OBJECT-TYPE
+              SYNTAX  SEQUENCE OF NfsEntry
+              MAX-ACCESS  not-accessible
+              STATUS  current
+              DESCRIPTION
+                      "NFS mount table of the VxWorks target."
+              ::= { sysnfs 3 }
+
+          nfsEntry OBJECT-TYPE
+              SYNTAX  NfsEntry
+              MAX-ACCESS  not-accessible
+              STATUS  current
+              DESCRIPTION
+                      "All the information necessary for an NFS mount entry."
+              INDEX   { nfsIndex }
+              ::= { nfsTable 1 }
+
+          NfsEntry ::=
+              SEQUENCE {
+		  nfsIndex
+		      Integer32,
+		  nfsState
+		      INTEGER,
+		  nfsHostName
+		      DisplayString,
+                  nfsHostIpAddr
+                      IpAddress,
+                  nfsHostFileSysName
+		      DisplayString,
+                  nfsLocalFileSysName
+		      DisplayString
+              }
+
+          nfsIndex OBJECT-TYPE
+             SYNTAX Integer32
+             MAX-ACCESS read-write
+             STATUS current
+             DESCRIPTION
+                     "The index to the NFS table.  The index is used to create 
+		      and delete entries.  An entry is created by specifying 
+		      an index of zero.  Once the entry is created in the 
+		      VxWorks target the entry index is assigned.  This index 
+		      can NOT be changed once it has been assigned by the system" 
+
+             ::= { nfsEntry 1 }
+
+          nfsState OBJECT-TYPE
+             SYNTAX  INTEGER {
+                          nfs-mounted(1),  -- File system is available.
+			  nfs-unmount(2)   -- File system is to be unmounted.
+                      }
+             MAX-ACCESS read-write
+             STATUS current
+             DESCRIPTION
+                     "The state of the file system is reported by this
+		      field.  The only valid state that this field can be
+		      set to is nfs-unmount."
+
+             ::= { nfsEntry 2 }
+
+
+          nfsHostName OBJECT-TYPE
+              SYNTAX  DisplayString
+              MAX-ACCESS  read-write
+              STATUS  current
+              DESCRIPTION
+                      "The name of the remote host that exports the file 
+		       system mounted on the VxWorks target.  This name must
+		       exist in the VxWorks host table"
+
+	      ::= { nfsEntry 3 }
+
+          nfsHostIpAddr OBJECT-TYPE
+              SYNTAX  IpAddress
+              MAX-ACCESS  read-write
+              STATUS  current
+              DESCRIPTION
+                      "The IP address of the remote host that exports the file 
+		       system mounted on the VxWorks target."
+
+	      ::= { nfsEntry 4 }
+
+          nfsHostFileSysName OBJECT-TYPE
+              SYNTAX  DisplayString
+              MAX-ACCESS  read-write
+              STATUS  current
+              DESCRIPTION
+                      "The name of the remote host file system that is mounted
+		       on the VxWorks target."
+
+	      ::= { nfsEntry 5 }
+
+          nfsLocalFileSysName OBJECT-TYPE
+              SYNTAX  DisplayString
+              MAX-ACCESS  read-write
+              STATUS  current
+              DESCRIPTION
+                      "The name of the local file system where the remote
+		       file system is mounted."
+
+	      ::= { nfsEntry 6 }
+
+
+          -- The Systems Trap Definitions.
+
+          -- These are the traps which are generated from the target to 
+	  -- the SNMP Network Manager.
+
+	  vxTaskDeleted NOTIFICATION-TYPE
+	      OBJECTS { taskId }
+	      STATUS  current
+	      DESCRIPTION
+		      "A vxTaskDeleted trap signifies that a task has been
+		       deleted in the system."
+	    
+	    ::= { systraps  1 }
+
+END

@@ -1,0 +1,55 @@
+FILE LIST -
+       	     etherInputDemo.c
+
+DESCRIPTION -
+	     Handles (receives) raw input frames (input data) from the network
+	     interface using the ether input hook routine etHandle().
+
+	     This is a demonstration of using low-level input ethernet
+	     routines. The other half of the demonstration of using low-level
+	     output ethernet routines is in etherOutputDemo.c. etherInputDemo 
+             runs on one VxWorks system, and etherOutputDemo runs on an 
+             other VxWrks system in the same physical network.
+
+RUNNING DEMO -
+	     Place the etherInputDemo.c in your
+	     <Tornado> dir. Depending on the target 
+	     you have, define the CPU in your compile line and use
+	     the Makefile in the BSP dir. to compile.
+
+	     To run this demo invoke the function etherInputDemo()
+
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+              make CPU=PPC604 etherInputDemo.o
+
+% make CPU=PPC604 etherInputDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin
+-fno-for-scope -Wall -I/h   -I. 
+-I/petaluma1/mayur/tor101-ppc/target/config/all
+-I/petaluma1/mayur/tor101-ppc/target/h
+-I/petaluma1/mayur/tor101-ppc/target/src/config
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600
+-DTARGET_DIR="\"mv1604\""   -c etherInputDemo.c
+
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+->  ld <etherInputDemo.o
+value = 682224 = 0xa68f0 = end + 0xf10
+-> sp (etherInputDemo)
+task spawned: id = 5d1ca0, name = u0
+value = 6102176 = 0x5d1ca0
+
+The Output on Console:
+======================
+etherInputHookAdd successful
+
+

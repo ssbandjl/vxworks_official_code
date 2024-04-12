@@ -1,0 +1,65 @@
+FILE LIST -
+      testMktime.c
+
+DESCRIPTION -
+	     mktime() converts the time represented by the  tm  structure
+	     pointed  to  by  timeptr into a calendar time (the number of
+	     seconds since 00:00:00 UTC, January 1, 1970).
+	     RETURNS the specified calendar time.  If the calendar time
+	     cannot be represented, the function returns the value (time_t) -1.
+	     
+	     ctime:
+	     This routine converts the calendar time pointed to by timer 
+	     into local time in the form of a string. It is equivalent to:
+	     asctime (localtime (timer));
+	     RETURNS the pointer returned by asctime() with local broken-down
+	     time as the argument.
+	     
+	     assert:
+	     If an expression is false (that is, equal to zero) the 
+	     assert() macro writes information about the failed call to
+	     standard error in an implementation-defined format. It then
+	     calls abort().
+	     The diagnostic information includes:
+	         -the text of the argument
+		 -the name of the source file
+		 (value of preprocessor macro __FILE__)
+		 -the source line number 
+		  (value of preprocessor macro __LINE__)
+	   
+	     strcmp:
+	     This routine compares string s1 to string s2 lexicographically.
+	     RETURNS an integer greater than, equal to, or les than 0,
+	     according to whether s1 is lexcicographically greater than,
+	     equal to, or less than s2, respectively.
+
+	     To run this code invoke the function testMktime().
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+	      EXAMPLE COMPILE LINE - (use the MakeFile in the BSP)
+			    make CPU=PPC604 testMktime.o
+
+% make CPU=PPC604 testMktime.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c testMktime.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <testMktime.o
+value = 677928 = 0xa5828 = timeFiles + 0x64
+-> testMktime()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+SUCCESS testing mktime

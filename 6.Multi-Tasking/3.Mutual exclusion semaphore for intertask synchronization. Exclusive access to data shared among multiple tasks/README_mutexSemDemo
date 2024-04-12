@@ -1,0 +1,76 @@
+FILE LIST -
+	      mutexSemDemo.c
+
+DESCRIPTION -
+	      This demo demonstrates the usage of the mutual exclusion semaphore
+	      for intertask synchronization and obtaining exclusive access to a
+	      data structure shared among multiple tasks.
+
+	      It creates a mutual exclusion semaphore for intertask syncronization
+	      between the producerTask and the consumerTask. Both producerTask and
+	      consumerTask access and manipulate the global shared memory data
+	      structure simultaneously. To avoid corruption of the global shared
+	      memory data structure mutual exclusion semaphores are used.
+
+	      It then spawns the producerTask that produces the message and puts the message
+	      in the global shared data structure, spawns the consumerTask that
+	      consumes the message from the global shared data structure and
+	      updates the status field to CONSUMED so that producerTask can put
+	      the next produced message in the global shared data structure.
+	      After consumerTask has consumed all the messages, the mutual exclusion
+	      semaphore is deleted.
+
+	      To run this code invoke the function mutexSemDemo() 
+	       
+RUNNING DEMO -
+	      Place the mutexSemDemo.c file in your <Tornado> dir. Depending on
+	      the target you have, define the CPU in your compile line and use
+              the Makefile in the BSP dir. to compile.
+
+	      Run mutexSemDemo() on vxworks target.
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1604
+	      VxWorks     : 5.3.1
+
+	      EXAMPLE COMPILE LINE - (use the MakeFile in the BSP)
+			    make CPU=PPC604 mutexSemDemo.o
+
+% make mutexSemDemo.o
+/folk/mayur/tor101-ppc/target/config/mv1604> make mutexSemDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c mutexSemDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <mutexSemDemo.o
+value = 684824 = 0xa7318
+->  sp mutexSemDemo
+task spawned: id = 5b7b40, name = u2
+value = 5995328 = 0x5b7b40
+
+The Output on Console:
+======================
+semaphore taken 2 times
+0x5b2b18 (tProducerTask): ProducerTask: tid = 0x5b2b18, producing item = 1
+0x7fd030 (tConsumerTask): ConsumerTask: Consuming item = 1 from tid = 0x5b2b18
+
+0x5b2b18 (tProducerTask): ProducerTask: tid = 0x5b2b18, producing item = 2
+0x7fd030 (tConsumerTask): ConsumerTask: Consuming item = 2 from tid = 0x5b2b18
+
+0x5b2b18 (tProducerTask): ProducerTask: tid = 0x5b2b18, producing item = 3
+0x7fd030 (tConsumerTask): ConsumerTask: Consuming item = 3 from tid = 0x5b2b18
+
+0x5b2b18 (tProducerTask): ProducerTask: tid = 0x5b2b18, producing item = 4
+0x7fd030 (tConsumerTask): ConsumerTask: Consuming item = 4 from tid = 0x5b2b18
+
+0x5b2b18 (tProducerTask): ProducerTask: tid = 0x5b2b18, producing item = 5
+0x7fd030 (tConsumerTask): ConsumerTask: Consuming item = 5 from tid = 0x5b2b18
+

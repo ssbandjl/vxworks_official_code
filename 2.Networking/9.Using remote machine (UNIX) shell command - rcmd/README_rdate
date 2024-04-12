@@ -1,0 +1,55 @@
+FILE LIST -
+             rdate.c
+
+DESCRIPTION -
+	     Demo for displaying the results of the date command executed on
+	     a remote UNIX  host.
+
+RUNNING DEMO -
+	     Place the rdate file in your <Tornado> dir. Depending on the target
+	     you have, define the CPU in your compile line and use
+	     the Makefile in the agent dir. to compile.
+
+	     To run this rdate task, from the VxWorks shell do as follows:
+	     -> sp (rdate, "hostName")
+
+	     where hostName is the name of the UNIX host (as specified in
+	     the VxWorks target boot parameters).
+
+	     To run this code invoke the function rdate().
+
+TESTED ON - Host/Target : Solaris 2.5.1 / mv1604
+	    VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+            make CPU=PPC604  rdate.o
+
+%  make CPU=PPC604 rdate.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c rdate.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <rdate.o
+value = 878136 = 0xd6638
+
+->  sp (rdate, "petaluma")
+task spawned: id = 5ccc78, name = u9
+value = 6081656 = 0x5ccc78
+
+The output on the console window:
+=================================
+
+ Name of the user is mayur
+ Number of bytes read 29 
+
+ Date on petaluma: Mon Oct  6 17:37:52 PDT 1997 
+

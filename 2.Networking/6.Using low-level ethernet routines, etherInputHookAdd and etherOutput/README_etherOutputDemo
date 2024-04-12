@@ -1,0 +1,58 @@
+FILE LIST -
+             etherOutputDemo.c
+
+DESCRIPTION -
+	     This demo sends (broadcast) data on an ethernet network interface
+	     and handles (receives) raw input frames (input data) from 
+             the network interface using the ether input hook routine 
+	     etHandle().
+
+	     This is a simple demonstration of using low-level output ethernet
+	     routines. The other half of the demonstration of using low-level
+	     input ethernet routines is in etherInputDemo.c. etherInputDemo 
+             task runs on one VxWorks system, and etherOutputDemo task 
+             runs on other VxWorks systems within the same physical network.
+
+RUNNING DEMO -
+	     Place the etherOutputDemo.c file in your
+	     <Tornado> dir. Depending on the target
+	     you have, define the CPU in your compile line and use
+	     the Makefile in the BSP dir. to compile.
+	     
+	     Note: One needs to change INTERFACE_NAME in etherDemo.h to reflect
+	     which network interface is being used.
+
+	     To run this code invoke the function etherOutputDemo().
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	     make CPU=PPC604 etherOutputDemo.o
+
+%  make CPU=PPC604 etherOutputDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c etherOutputDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <etherOutputDemo.o
+value = 687704 = 0xa7e58
+-> sp (etherOutputDemo)
+task spawned: id = 5d1ca0, name = u0
+value = 6102176 = 0x5d1ca0
+
+Output on the console window:
+=============================
+etherOutput done - message: Hello World!!! 
+etherOutputDemo completed
+
+

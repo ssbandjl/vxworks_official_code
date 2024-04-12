@@ -1,0 +1,392 @@
+FILE LIST -
+	     deadlineWdDemo.c
+
+DESCRIPTION -
+	     This program demonstrates using watchdog timers to invoke deadline
+	     handlers. CoordinatorTask sends data to the organizer. 
+	     OrganizerTask receives data from the coordinatorTask, and resets
+	     the coordinatorTask when no data is sent by the coordinatorTask in
+	     the past five seconds (deadline time). This demonstration program 
+	     is automatically stopped after twenty seconds.
+
+RUNNING DEMO -
+	     Place the deadlineWdDemo.c file in your <Tornado> dir. Depending
+	     on the target you have, define the CPU in your compile line and
+	     use the Make in the BSP dir. to compile.
+
+	     To run this code invoke the function deadlineWdDemo().
+
+TESTED ON -  Host/Target : Solaris 2.5.1 /mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	     make CPU=PPC604 deadlineWdDemo.o 
+
+% make deadlineWdDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\"" -g -O0  -c deadlineWdDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <deadlineWdDemo.o
+value = 688648 = 0xa8208 = dbgTraceStub + 0xe6c
+-> sp (deadlineWdDemo)
+task spawned: id = 5d1728, name = u0
+value = 6100776 = 0x5d1728
+
+
+Output on Console:
+======================
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received 
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+coordinatorTask: Sent item = 4
+coordinatorTask: idle for 4 seconds
+organizerTask: Received item = 4
+
+
+coordinatorTask: Sent item = 5
+coordinatorTask: idle for 5 seconds
+organizerTask: Received item = 5
+interrupt: 
+
+Resetting the co-ordinator on elapse of the deadline time
+
+
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received item = 1
+
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+Stopping deadlineWdDemo
+Error in receiving the message: errno = 0x3d0003
+
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / hkv960
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	     make deadlineWdDemo.o
+
+% make deadlineWdDemo.o
+cc960 -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ -mca 
+-mstrict-align -ansi -nostdinc -O -fvolatile -fno-builtin  -Wall -I/h   -I. 
+-I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=I960CA 
+-DVX_IGNORE_GNU_LIBS    
+-c deadlineWdDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <deadlineWdDemo.o
+value = 665312 = 0xa26e0
+-> sp (deadlineWdDemo)
+task spawned: id = 7c5da0, name = u1
+value = 8150432 = 0x7c5da0
+
+Output on Console:
+======================
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received item = 1
+
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+coordinatorTask: Sent item = 4
+coordinatorTask: idle for 4 seconds
+organizerTask: Received item = 4
+
+
+coordinatorTask: Sent item = 5
+coordinatorTask: idle for 5 seconds
+organizerTask: Received item = 5
+interrupt: 
+
+Resetting the co-ordinator on elapse of the deadline time
+
+
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received item = 1
+
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+Stopping deadlineWdDemo
+Error in receiving the message: errno = 0x3d0003
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv177
+	     VxWorks     : 5.3.1
+
+% make deadlineWdDemo.o
+cc68k -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-m68040 -ansi -nostdinc -O2 -fvolatile -fno-builtin -Wall -I/h   -I. 
+-I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=MC68060     
+-c deadlineWdDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <deadlineWdDemo.o
+value = 662336 = 0xa1b40
+-> sp (deadlineWdDemo)
+task spawned: id = 1fb57b4, name = u0
+value = 33249204 = 0x1fb57b4
+
+Output on Console:
+======================
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received item = 1
+
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+coordinatorTask: Sent item = 4
+coordinatorTask: idle for 4 seconds
+organizerTask: Received item = 4
+
+
+coordinatorTask: Sent item = 5
+coordinatorTask: idle for 5 seconds
+organizerTask: Received item = 5
+interrupt: 
+
+Resetting the co-ordinator on elapse of the deadline time
+
+
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received item = 1
+
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+Stopping deadlineWdDemo
+Error in receiving the message: errno = 0x3d0003
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv1603
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	      make CPU=PPC603 deadlineWdDemo.o
+
+%make CPU=PPC603 deadlineWdDemo.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope  
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC603  -DMV1600 
+-DTARGET_DIR="\"mv1603\""   -c deadlineWdDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <deadlineWdDemo.o
+value = 664192 = 0xa2280
+-> sp (deadlineWdDemo)
+task spawned: id = 5d1ca0, name = u0
+value = 6102176 = 0x5d1ca0
+
+The Output on Console:
+======================
+Signal SIGILL received
+recover from signal 4. val = 50 
+
+
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received item = 1
+
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+coordinatorTask: Sent item = 4
+coordinatorTask: idle for 4 seconds
+organizerTask: Received item = 4
+
+
+coordinatorTask: Sent item = 5
+coordinatorTask: idle for 5 seconds
+organizerTask: Received item = 5
+interrupt: 
+
+Resetting the co-ordinator on elapse of the deadline time
+
+
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received item = 1
+
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+Stopping deadlineWdDemo
+Error in receiving the message: errno = 0x3d0003
+
+TESTED ON -   Host/Target : Solaris 2.5.1 / mv2603
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+	      make PPC603 deadlineWdDemo.o
+
+%make PPC603 deadlineWdDemo.o
+ccppc -B/petaluma1/mayur/tor101/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope  
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101/target/config/all 
+-I/petaluma1/mayur/tor101/target/h -I/petaluma1/mayur/tor101/target/src/config 
+-I/petaluma1/mayur/tor101/target/src/drv -DCPU=PPC603  -DMV2600 
+-DTARGET_DIR="\"mv2603\""   -c deadlineWdDemo.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+-> ld <deadlineWdDemo.o
+value = 709840 = 0xad4d0
+-> sp (deadlineWdDemo)
+task spawned: id = be7d28, name = u2
+value = 12483880 = 0xbe7d28
+
+Output on Console:
+======================
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received item = 1
+
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+coordinatorTask: Sent item = 4
+coordinatorTask: idle for 4 seconds
+organizerTask: Received item = 4
+
+
+coordinatorTask: Sent item = 5
+coordinatorTask: idle for 5 seconds
+organizerTask: Received item = 5
+interrupt: 
+
+Resetting the co-ordinator on elapse of the deadline time
+
+
+coordinatorTask: Sent item = 1
+coordinatorTask: idle for 1 seconds
+organizerTask: Received item = 1
+
+
+coordinatorTask: Sent item = 2
+coordinatorTask: idle for 2 seconds
+organizerTask: Received item = 2
+
+
+coordinatorTask: Sent item = 3
+coordinatorTask: idle for 3 seconds
+organizerTask: Received item = 3
+
+
+Stopping deadlineWdDemo
+Error in receiving the message: errno = 0x3d0003
+
+
+
+

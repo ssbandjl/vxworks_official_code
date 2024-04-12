@@ -1,0 +1,50 @@
+FILE LIST -
+             printEtherAddrs.c
+
+DESCRIPTION -
+             Demo for printing the ethernet address of the network
+	     interface of the VxWorks target.
+
+RUNNING DEMO -
+	     Place the  printEtherAddrs.c file in your
+	     <Tornado> dir. Depending on the target
+	     you have, define the CPU in your compile line and use
+	     the Makefile in the BSP dir. to compile.
+
+	     To get the name of the ethernet interface use ifShow() command,
+	     it lists all the network interfaces on the vxWorks target.
+
+	     To fun this code invoke the function printEtherAddrs().
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+	     make CPU=PPC604 printEtherAddrs.o
+
+%  make CPU=PPC604 printEtherAddrs.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c printEtherAddrs.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <printEtherAddrs.o
+value = 679096 = 0xa5cb8 = end + 0x2d8
+-> ifShow              
+value = 18 = 0x12
+-> printEtherAddrs ("dc0")
+value = 39 = 0x27 = '''
+
+Output on the console:
+======================
+Ethernet address is 08:00:3e:30:86:bc
+
+

@@ -1,0 +1,71 @@
+FILE LIST - 
+            zbufManip.c
+
+DESCRIPTION -
+	    This module illustrates the use of zbufLib routines, and their 
+	    effect on zbuf segments and data sharing. To keep the example 
+	    manageable, the zbuf data used is small, and the
+	    execution environment is the Tornado shell.
+
+
+RUNNING DEMO -
+	     Place the zbufManip.c file in your <Tornado> dir. Depending on
+	     the target you have, define the CPU in your compile line and use
+	     the Makefile in the BSP dir. to compile.
+
+	     To link in (and initalize) the zbuf socket interface, define 
+	     INCLUDE_ZBUF_SOCK in configAll.h.
+
+	     To run this demo invoke the function zbufManip().
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE -
+             make CPU=PPC604 zbufManip.o
+
+% make CPU=PPC604 zbufManip.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c zbufManip.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+-> ld <zbufManip.o
+value = 689096 = 0xa83c8 = readyQBMap + 0x3b4
+-> zbufManip()
+value = 0 = 0x0
+
+Output on the console:
+======================
+ Inserting data from buff into the zbuf zId1.
+ Contents of buff -- I cannot repeat enough 
+ Displaying contents of zId1:
+ segID 0x5f9d80 at 0x11ddbc + 0x0 (22 bytes): I cannot repeat enough
+
+
+ Copying contents of zId1 to zId2 
+ segID 0x5f9f00 at 0x11ddbc + 0x0 (22 bytes): I cannot repeat enough
+
+
+ Now the copy has its own Id but uses the same address 
+ Inserting a second buffer into the middle of the existing data 
+ in zId1 gives us a zbuf made up of three segments. 
+ Contents of buffer being entered is 'this' 
+
+ segID 0x5f9d80 at 0x11ddbc + 0x0 (15 bytes): I cannot repeat
+ segID 0x5f9e00 at 0x11df6c + 0x0 ( 4 bytes): this
+ segID 0x5f9e80 at 0x11ddcb + 0x0 ( 7 bytes):  enough
+
+
+ Because the underlying buffer is not modified both buff and the
+ duplicate zId2 still contain the original String. 
+ Contents of buff: I cannot repeat enough
+ Contents of zId2: segID 0x5f9f00 at 0x11ddbc + 0x0 (22 bytes): I cannot repeat enough
+

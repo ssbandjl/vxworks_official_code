@@ -1,0 +1,79 @@
+FILE LIST -
+             testCtimeUTC.c
+
+DESCRIPTION -
+	     malloc: This routine allocates a block of memory from 
+	     the free list.  The size of the blcok will be equal to
+	     or greater than nBytes. 
+	     RETURNS a pointer to the allocated block of memory, or
+	     a null pointer if there is an error.
+
+	     assert:  If an expression is false (that is, equal to zero)
+	     the assert() macro writes information about the failed call
+	     to standard error in an implementation-defined format.
+	     It then calls abort().  The diagnostic information
+	     includes:
+	     -the text of the argument
+	     -the name of the source file (value of preprocessor macro __FILE__)
+	     -the source line number (value of preprocessor macro __LINE__)
+
+	     strcmp: This routine compares string s1 to string s2
+	     lexicographically. 
+	     RETURNS an integer greater than, equal to, or les than
+	     0, according to whether s1 is lexcicographically greater
+	     than, equal to, or less than s2, respectively.
+
+	     ctime: This routine converts the calendar time pointed to
+	     by timer into local time in the form of a string.
+	     It is equivalent to:
+	     asctime (localtime (timer));
+	     RETURNS the pointer returned by asctime() with local
+	     broken-down time as the argument.
+
+	     printf: This routine writes output to the stream pointed
+	     to by stream, under control of the string pointed to by format 
+	     that specifies how subsequent arguments are converted for output.
+	     If there are insufficient arguments for the format, the behavior
+	     is undefined.  If the format is exhausted while arguments 
+	     remain, the excess arguments are evaluated (as always) but
+	     are otherwise ignored. 
+	     RETURNS the number of characters trasmitted, or a negative
+	     value if an output error occurred.
+
+	     To run this code invoke the function testCtimeUTC().
+
+RUNNING DEMO - 
+	     Place the testCtimeUTC.c in your <Tornado> dir. Depending
+	     on the target you have, define the CPU in your compile line
+	     and use the Makefile in the BSP dir. to compile.
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1604
+             VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+	      make CPU=PPC604 testCtimeUTC.o
+
+% make CPU=PPC604 testCtimeUTC.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  
+-DMV1600 -DTARGET_DIR="\"mv1604\""   -c testCtimeUTC.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <testCtimeUTC.o
+value = 908816 = 0xdde10
+-> testCtimeUTC()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+SUCCESS testing ctimeUTC
+
+	     

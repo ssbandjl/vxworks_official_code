@@ -1,0 +1,101 @@
+FILE LIST -
+             testSetjmp.c
+
+DESCRIPTION -
+	     Test routines for setjmp and longjmp.
+	     These functions are useful for dealing with errors and interrupts
+	     encountered in a low-level subroutine of a program.
+
+	     setjmp: saves the calling environment in a jmp_buf argument for
+	     later use by longjmp.
+	     int setjmp(jmp_buf env);
+
+	     longjmp: performs non-logical goto by restoring the saved 
+             environment.
+	     void longjmp(jmp_buf env, int val);
+	     After longjmp() is completed, program execution continues as 
+             if the corresponding call of setjmp() just returned the value val.
+
+	     jmpbuf: an array type suitable for holding the information 
+             needed to restore a calling environment.
+
+	     RETURN VALUES
+	     setjmp: From a direct invocation setjmp returns a zero. Froms a 
+             call to longjmp, it returns a  non zero value specified as 
+             an argument to longjmp().
+
+	     longjmp: This routine does not return to its caller. Instead,
+	     it causes setjmp() to return val, unless val is zero; in that 
+             case setjmp() returns 1.
+
+	     To run this code invoke the function testsetjmp().
+
+RUNNING DEMO -
+	     Place the testSetjmp.c file in your <Tornado> dir. Depending on
+	     the target you have, define the CPU in your compile line and use
+	     the Makefile in the BSP dir. to compile.
+
+TESTED ON -  Host/Target : Solaris 2.5.1 /mv1604
+	     VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+	     make CPU=PPC604 testSetjmp.o
+
+% make testSetjmp.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c testSetjmp.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <testSetjmp.o
+value = 834248 = 0xcbac8
+-> testsetjmp()
+value = 0 = 0x0
+
+The Output on Console:
+======================
+In case 0 
+calling function jmto which makes a call to longjmp
+with its second arg = 0 which causes setjmp to return a 1.
+ 
+  PRESS ENTER TO CONTINUE ...
+
+  In case 1 
+  calling function jmpto which makes a call to longjmp
+  with its second arg = 2 which causes setjmp to return a 2.
+   
+  PRESS ENTER TO CONTINUE ...
+
+  In case 2 
+  In case 0 of case 2
+  calling function jmpto which makes a call to longjmp
+  with its second arg = -7  which causes setjmp to return a -7.
+     
+  PRESS ENTER TO CONTINUE ...
+
+  In case -7 of case 2 
+  calling function jmpto which makes a call to longjmp
+  with its second arg = 3  which causes setjmp to return a 3.
+       
+  PRESS ENTER TO CONTINUE ...
+
+  In case 3 
+  longjmp(b1, 5):- makes the corresponding call of setjmp() to return a value 
+  of 5, i.e,
+  the program execution goes back to the setjmp() function in case 2 and then 
+  causes the switch to case 5.
+  In case 5 of case 2  
+  returning execution to main program.
+	 
+  PRESS ENTER TO CONTINUE ...
+
+  SUCCESS testing setjmp
+

@@ -1,0 +1,63 @@
+FILE LIST -
+      nfsWrite.c
+
+DESCRIPTION - 
+	     Demo for using FTP communication between an FTP client
+	     running on a VxWorks target and a remote FTP server
+	     running on a UNIX host.
+
+RUNNING DEMO -
+	     Place the nfsWrite.c file in your
+	     <Tornado> dir. Depending on the target
+	     you have, define the CPU in your compile line and use
+	     the Makefile in the agent dir. to compile.
+
+	     Note: Need to use then nfs mounted name. Please note that NFS must
+	     be congigured to have this demo work.
+             Also #define INCLUDE_NFS in the config.h file
+
+	     Call the function nfsWrite() to invoke this demo.
+
+TESTED ON -  Host/Target : Solaris 2.5.1 / mv1604
+	     VxWorks     : 5.3.1
+
+	     EXAMPLE COMPILE LINE -
+			   make CPU=PPC604 nfsWrite.o
+
+%  make CPU=PPC604 nfsWrite.o
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\"" -g -O0  -c nfsWrite.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <nfsWrite.o
+value = 690208 = 0xa8820 = c + 0xd4
+-> sp (nfsWrite) 
+task spawned: id = 5d0170, name = u4
+value = 6095216 = 0x5d0170
+
+The Output on Console:
+======================
+Writing to NFS file 
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+Completed nfsWrite
+
+

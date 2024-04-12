@@ -1,0 +1,45 @@
+FILE LIST -
+             posixTimer.c
+
+DESCRIPTION - 
+             This demo describes how to use the POSIX timer library
+             functions. 
+
+
+RUNNING DEMO -
+	      Place posixTimer.c in your <Tornado> dir. Depending on the 
+	      target you have, define the CPU in your compile line and use
+	      the Makefile in the BSP dir. to compile.
+              To invoke this demo call setup(). 
+
+TESTED ON -   Host/Target : Solaris 2.5.1 /mv1604
+	      VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+	      make CPU=PPC604 posixTimer.c
+
+% make posixTimer.c
+ccppc -B/petaluma1/mayur/tor101-ppc/host/sun4-solaris2/lib/gcc-lib/ 
+-mstrict-align -ansi -nostdinc -O2 -fvolatile -fno-builtin -fno-for-scope 
+-Wall -I/h   -I. -I/petaluma1/mayur/tor101-ppc/target/config/all 
+-I/petaluma1/mayur/tor101-ppc/target/h 
+-I/petaluma1/mayur/tor101-ppc/target/src/config 
+-I/petaluma1/mayur/tor101-ppc/target/src/drv -DCPU=PPC604  -DMV1600 
+-DTARGET_DIR="\"mv1604\""   -c posixTimer.c
+
+OUTPUTS/LOGFILE -
+
+On VxWorks target:
+==================
+
+-> ld <posixTimer.o
+value = 689408 = 0xa8500
+-> setup
+value = 0 = 0x0
+
+The Output on Console:
+======================
+Timer expired with the message Hi!!
+Task woken up by alarm!
+
+

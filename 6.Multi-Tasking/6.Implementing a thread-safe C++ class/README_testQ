@@ -1,0 +1,162 @@
+FILE LIST -
+                bool.h
+                cpstring.h
+                cpstring.cc
+                queueT.h
+                queueT.cc
+                sharedQT.h
+                sharedQT.cc
+                testQ.h
+                testQ.cc
+                Makefile
+               
+DESCRIPTION -
+
+                This program demonstrates using a thread safe C++ class called
+                SharedQT<T>.  This example actually has several elements which
+                may prove useful for those who are new to C++:
+
+                1.  The class, QueueT<T>, shows a very elementary example of
+                    how a template can be used to implement a generic
+                    container class.
+
+                2.  SharedQT<T> demonstrates how to inherit from a template
+                    class.  SharedQT<T> also demonstrates a potentially
+                    useful specialization for a generic container; namely,
+                    how to make a container thread-safe in a very simple way. 
+
+                3.  testQ.cc demonstrates why a thread safe container might
+                    be desirable.
+
+                4.  The project Makefile demonstrates how to add your own
+                    inference rules for compiling C++ source files with a
+                    .cc extension.
+
+                The idea of the testQ.cc program is this:  Suppose one has 
+                some C++ class which will be storing and manipulating some
+                data.  Further, suppose that a particular object of this
+                class is going to be manipulated by multiple tasks.  This
+                may be a problem if the class object does not maintain some
+                mutual exclusion mechanism internally.  One could implement
+                a mutual exclusion mechanism in the code which uses the
+                class object, but it would be much more convenient if the
+                class took care of the mutual exclusion.
+
+                SharedQT<T> offers an example of one way to make a class
+                thread safe.  SharedQT<T> simply calls on the base class,
+                QueueT<T>, to perform the actual queue operations.  The
+                only thing added by SharedQT<T> is a single mutex semaphore
+                to guard access to the queue.  Given two tasks manipulating
+                a SharedQT<T> object, only one task will get to use the
+                semaphore at any given moment.  As a result, if one task
+                has called a SharedQT<T> method and obtained the semaphore,
+                another task calling a SharedQT<T> method, for the same
+                SharedQT<T> object, will be pended.
+
+                The use of the String class is purely incidental to this
+                example.  One should be able to store any type in the
+                queue. 
+
+                This example is in no way meant to provide a definitive
+                solution on how to implement thread safe C++ classes under
+                vxWorks.  Certainly, C++ power-users will have their own
+                preferences.  Further, there may be applications in which
+                the particular type of semaphore used in SharedQT<T> is
+                not appropriate.
+
+
+                CAUTIONARY
+                ----------
+
+                The architecture of this example leaves potential room 
+                for disaster.  The routine, testQ, instantiates a SharedQT<T>
+                object, then spawns two tasks and passes the address of this
+                object to the two tasks.
+
+                One spawned tasked will be reading from the SharedQT<T> object,
+                and the other spawned task will be writing to the SharedQT<T>
+                object.
+
+                If testQ should return, or be deleted, the SharedQT<T> object
+                will be destroyed, and the tasks will be left using invalid 
+                pointers, which will certainly cause some exceptions on your
+                target.
+              
+                Ordinarilly, testQ will just pend on the ready queue because
+                the last thing testQ does is lower its own priority to 255.
+                As a result, testQ is effectively blocked by higher priority
+                tasks.  However, do note that the testQ routine is not 
+                deletion safe if started from the WindSh with the sp()
+                primitive.  As a result,  one still has an opportunity to
+                use td() - taskDelete - from the WindSh on the testQ task.
+
+                Ideally, one would like to make sure that the SharedQT<T>
+                object does not go out of scope or get deleted unexpectedly
+                while tasks are using the object.  This can be accomplished
+                by making the SharedQT<T> object global.  Then, one can be
+                sure that the memory is probably going to be around until
+                rebooting.  On the other hand, if SharedQT<T> is global,
+                you can not really destroy the object until rebooting, or
+                unloading the object module in which it is defined.  As a
+                result, the global object is going to consume some memory.
+
+                As an exercise left for the reader, consider some ways to
+                get this example to terminate nicely.  That is, we would like
+                the tasks to terminate normally (instead of spinning forever)
+                and then have the SharedQT<T> destructor called to clean up
+                the queue and semaphore resources.
+
+                This job is not terribly difficult, but it does require some
+                additional planning to account for the deletion safe semaphore
+                used by the reader and writer tasks.  The reader and writer
+                tasks can be deleted when not in possession of the semaphore.
+                Once the reader and writer have terminated, the testQ routine
+                should terminate normally; that is, the SharedQT<T> destructor
+                will be called, and this will be just fine as long as no tasks
+                happen to be using the SharedQT<T> object in testQ.  
+
+
+RUNNING DEMO -
+                Before using the project Makefile to build the example,
+                make sure that the environment variables for your development
+                machine are set to the appropriate values.  Tornado for
+                Windows users should run:
+
+                ${WIND_BASE}\host\x86-win32-bin\torvars.bat
+
+                before building the project from some VDM. 
+
+                From the command line:
+
+                % make tQue.out
+
+                Load tQue.out from WindSh, and start the test program:
+
+                --> ld < tQue.out
+                --> sp testQ
+
+                The output will be displayed on the system console.  One
+                can change the project name by editing the PROJECT macro in
+                the Makefile.  The target CPU type and debug options can be
+                easily modified in the Makefile using the CPU and DEBUG_OPT
+                macros.
+
+
+TESTED ON -   Host        :  Windows NT 4.0 (sp3) and Solaris 2.5
+              Target      :  ARM Pid7t, Intel ev386ex, VxSim - SIMSPARCSOLARIS
+              VxWorks     :  5.3.1 
+
+
+EXAMPLE COMPILE LINE - 
+
+              Again, use the included Makefile and run make from the 
+              command line:
+
+              % make tQue.out
+
+
+OUTPUTS/LOGFILE - 
+
+              The global array - gWaves in testQ.cc - should be printed
+              repeatedly on the system console. 
+

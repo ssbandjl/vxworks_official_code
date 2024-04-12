@@ -1,0 +1,118 @@
+FILE LIST - 
+              demoMy.mib snmpTask.c  snmpTask.h
+
+DESCRIPTION - 
+              This demo allows an SNMPv1/v2c manager to monitor the task
+	      table in a target. All the task related variables can be 
+	      looked up individually and relevant ones can be altered. 
+	      New tasks can be spawned and existing ones can be deleted.
+	      Incase of set failures, this code will not restart a task 
+	      if it had been deleted.
+
+RUNNING DEMO - 
+              See DESCRIPTION and CAVEAT in the source code.
+
+	      You might have to change the undo routine to suit your
+	      requirements.
+                   
+              Place the snmpTask.c file in your <Tornado>/src/snmpv1/agent
+              dir. Depending on the target you have, define the CPU 
+	      in your compile line and use the Makefile in the agent dir.
+	      to compile. The header file for this code is snmpTask.h. You 
+	      can insert all the information from the snmpTask.h file into
+	      a suitable header file in the target/h/snmp dir. 
+
+TESTED ON -   Host/Target : Solaris 2.5 / mv162
+              VxWorks     : 5.3.1
+
+EXAMPLE COMPILE LINE - 
+              make CPU=MC68040 snmpTask.o
+
+%  make CPU=MC68040 snmpTask.o
+cc68k -B/folk/rajesh/tor101/host/sun4-solaris2/lib/gcc-lib/ -m68040 -ansi 
+-nostdinc -O -fstrength-reduce -fno-builtin -Wall  
+-I/folk/rajesh/tor101/target/h  -I/folk/rajesh/tor101/target/h/snmp/  -I. 
+-DCPU=MC68040  -DVXWORKS   -c snmpTask.c
+
+
+Output LogFile:
+
+%> snmpwalk sysTask
+
+taskId.3772852          Number: 3772852
+taskId.3814060          Number: 3814060
+taskId.3923448          Number: 3923448
+taskId.4088156          Number: 4088156
+taskId.4098672          Number: 4098672
+taskName.3772852        String(8): tWdbTask
+taskName.3814060        String(6): tSnmpd
+taskName.3923448        String(8): tNetTask
+taskName.4088156        String(8): tLogTask
+taskName.4098672        String(8): tExcTask
+taskPriority.3772852            Number: 3
+taskPriority.3814060            Number: 150
+taskPriority.3923448            Number: 50
+taskPriority.4088156            Number: 0
+taskPriority.4098672            Number: 0
+taskStatus.3772852      Number: task-delay(3)
+taskStatus.3814060      Number: task-ready(1)
+taskStatus.3923448      Number: task-delay(3)
+taskStatus.4088156      Number: task-delay(3)
+taskStatus.4098672      Number: task-delay(3)
+taskOptions.3772852     Number: 14
+taskOptions.3814060     Number: 4
+taskOptions.3923448     Number: 7
+taskOptions.4088156     Number: 6
+taskOptions.4098672     Number: 7
+taskMain.3772852        String(16): _wdbIsNowTasking
+taskMain.3814060        String(10): _snmpdInit
+taskMain.3923448        String(8): _netTask
+taskMain.4088156        String(8): _logTask
+taskMain.4098672        String(8): _excTask
+taskStackPtr.3772852            Gauge: 3772496
+taskStackPtr.3814060            Gauge: 3811600
+taskStackPtr.3923448            Gauge: 3923360
+taskStackPtr.4088156            Gauge: 4087988
+taskStackPtr.4098672            Gauge: 4098508
+taskStackBase.3772852           Gauge: 3772852
+taskStackBase.3814060           Gauge: 3814060
+taskStackBase.3923448           Gauge: 3923448
+taskStackBase.4088156           Gauge: 4088156
+taskStackBase.4098672           Gauge: 4098672
+taskStackPos.3772852            Gauge: 3769092
+taskStackPos.3814060            Gauge: 3785396
+taskStackPos.3923448            Gauge: 3913460
+taskStackPos.4088156            Gauge: 4083168
+taskStackPos.4098672            Gauge: 4090684
+taskStackEnd.3772852            Gauge: 3768756
+taskStackEnd.3814060            Gauge: 3785388
+taskStackEnd.3923448            Gauge: 3913448
+taskStackEnd.4088156            Gauge: 4083156
+taskStackEnd.4098672            Gauge: 4090672
+taskStackSize.3772852           Gauge: 3760
+taskStackSize.3814060           Gauge: 28664
+taskStackSize.3923448           Gauge: 9988
+taskStackSize.4088156           Gauge: 4988
+taskStackSize.4098672           Gauge: 7988
+taskStackSizeUsage.3772852      Gauge: 356
+taskStackSizeUsage.3814060      Gauge: 2460
+taskStackSizeUsage.3923448      Gauge: 88
+taskStackSizeUsage.4088156      Gauge: 168
+taskStackSizeUsage.4098672      Gauge: 164
+taskStackMaxUsed.3772852        Gauge: 1372
+taskStackMaxUsed.3814060        Gauge: 3792
+taskStackMaxUsed.3923448        Gauge: 888
+taskStackMaxUsed.4088156        Gauge: 236
+taskStackMaxUsed.4098672        Gauge: 304
+taskStackFree.3772852           Gauge: 2388
+taskStackFree.3814060           Gauge: 24872
+taskStackFree.3923448           Gauge: 9100
+taskStackFree.4088156           Gauge: 4752
+taskStackFree.4098672           Gauge: 7684
+taskErrorStatus.3772852         Number: 0
+taskErrorStatus.3814060         Number: 1835009
+taskErrorStatus.3923448         Number: 61
+taskErrorStatus.4088156         Number: 0
+taskErrorStatus.4098672         Number: 0
+
+
